@@ -4,6 +4,9 @@
   "description": "Universal AI coding token usage monitor — track costs across Claude Code, Codex, Cursor, Windsurf, Cline, Copilot, Continue.dev, Aider, and Antigravity from a single dashboard",
   "type": "module",
   "main": "server.js",
+  "bin": {
+    "ag-token": "./cli.js"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"

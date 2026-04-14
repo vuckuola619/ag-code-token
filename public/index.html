@@ -5,1312 +5,625 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AG-Code Token — Universal AI Token Monitor</title>
   <meta name="description" content="See where your AI coding tokens go. Monitor usage across Antigravity, Claude Code, Codex, Cursor, Windsurf, Cline, and more.">
-
-  <!-- Radix Colors (Dark) — accessible, systematic color palette -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/slate-dark.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/blue-dark.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/violet-dark.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/cyan-dark.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/green-dark.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/amber-dark.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/red-dark.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/pink-dark.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@radix-ui/colors@latest/orange-dark.css" />
-
-  <!-- Typography: Inter (UI) + JetBrains Mono (data) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Lucide Icons (SVG icon library — no emoji) -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- ECharts & ECharts-GL -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts-gl@2.0.9/dist/echarts-gl.min.js"></script>
   <style>
-    /* ─── Design Tokens (Radix Colors + Custom) ─────────────────────────── */
+    /* ── shadcn/ui Dark Design Tokens ──────────────────────────────────── */
     :root {
-      --bg-app:      var(--slate-1);
-      --bg-subtle:   var(--slate-2);
-      --bg-element:  var(--slate-3);
-      --bg-hover:    var(--slate-4);
-      --bg-active:   var(--slate-5);
-      --border-subtle:  var(--slate-6);
-      --border-element: var(--slate-7);
-      --border-hover:   var(--slate-8);
-      --text-lo:     var(--slate-9);
-      --text-med:    var(--slate-10);
-      --text-hi:     var(--slate-11);
-      --text-max:    var(--slate-12);
-
-      /* Accent: Blue */
-      --accent-bg:     var(--blue-3);
-      --accent-hover:  var(--blue-4);
-      --accent-solid:  var(--blue-9);
-      --accent-text:   var(--blue-11);
-
-      /* Semantic */
-      --success:       var(--green-9);
-      --success-text:  var(--green-11);
-      --warning:       var(--amber-9);
-      --warning-text:  var(--amber-11);
-      --danger:        var(--red-9);
-      --danger-text:   var(--red-11);
-
-      /* Spacing scale (4px base) */
-      --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
-      --s5: 20px; --s6: 24px; --s7: 28px; --s8: 32px;
-      --s10: 40px; --s12: 48px; --s16: 64px;
-
-      /* Radius */
-      --r-sm: 6px;
-      --r-md: 10px;
-      --r-lg: 14px;
-      --r-xl: 18px;
-
-      /* Shadows */
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-      --shadow-md: 0 4px 16px rgba(0,0,0,0.25);
-      --shadow-lg: 0 12px 48px rgba(0,0,0,0.3);
-      --shadow-glow: 0 0 24px rgba(var(--blue-9), 0.15);
-
-      /* Transition */
-      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-      --t-fast: 150ms;
-      --t-base: 200ms;
-      --t-slow: 300ms;
+      --background: 240 10% 3.9%;
+      --foreground: 0 0% 98%;
+      --card: 240 10% 3.9%;
+      --card-foreground: 0 0% 98%;
+      --popover: 240 10% 3.9%;
+      --popover-foreground: 0 0% 98%;
+      --primary: 0 0% 98%;
+      --primary-foreground: 240 5.9% 10%;
+      --secondary: 240 3.7% 15.9%;
+      --secondary-foreground: 0 0% 98%;
+      --muted: 240 3.7% 15.9%;
+      --muted-foreground: 240 5% 64.9%;
+      --accent: 240 3.7% 15.9%;
+      --accent-foreground: 0 0% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 0 0% 98%;
+      --border: 240 3.7% 15.9%;
+      --input: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+      --radius: 0.5rem;
+      /* Semantic colors */
+      --green: 142 76% 36%;
+      --amber: 38 92% 50%;
+      --red: 0 72% 51%;
+      --blue: 217 91% 60%;
+      --violet: 258 90% 66%;
+      --cyan: 189 94% 43%;
     }
 
-    /* ─── Reduced motion ───────────────────────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
 
-    /* ─── Reset ────────────────────────────────────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: var(--bg-app);
-      color: var(--text-max);
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
       font-family: 'Inter', -apple-system, system-ui, sans-serif;
       min-height: 100vh;
-      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       line-height: 1.5;
+      font-size: 14px;
     }
 
-    /* ─── Focus visible (keyboard nav a11y) ────────────────────────────── */
-    :focus-visible {
-      outline: 2px solid var(--accent-solid);
-      outline-offset: 2px;
-      border-radius: var(--r-sm);
-    }
+    /* ── Utilities ─────────────────────────────────────────────────────── */
+    .mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+    .muted { color: hsl(var(--muted-foreground)); }
+    .text-right { text-align: right; }
 
-    :focus:not(:focus-visible) { outline: none; }
-
-    /* ─── Ambient background ───────────────────────────────────────────── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 25% 15%, var(--blue-2) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 50% at 75% 85%, var(--violet-2) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    /* ─── Scrollbar ────────────────────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--slate-6); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--slate-7); }
-
-    /* ─── Header ───────────────────────────────────────────────────────── */
-    .header {
-      padding: var(--s5) var(--s10);
+    /* ── Topbar ────────────────────────────────────────────────────────── */
+    .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: var(--s4);
-      border-bottom: 1px solid var(--border-subtle);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      background: color-mix(in srgb, var(--bg-app) 80%, transparent);
+      padding: 12px 24px;
+      border-bottom: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 50;
     }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: var(--s3);
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 600; font-size: 15px; letter-spacing: -0.2px;
+      color: hsl(var(--foreground));
     }
+    .topbar-logo svg { color: hsl(var(--muted-foreground)); }
+    .topbar-right { display: flex; align-items: center; gap: 8px; }
 
-    .logo-mark {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--orange-9), var(--amber-9));
-      border-radius: var(--r-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 16px color-mix(in srgb, var(--orange-9) 30%, transparent);
-      flex-shrink: 0;
+    /* ── Live Badge ────────────────────────────────────────────────────── */
+    .live-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 500; padding: 2px 10px 2px 8px;
+      border-radius: 9999px; border: 1px solid hsl(var(--border));
+      color: hsl(var(--muted-foreground));
     }
+    .live-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--muted-foreground)); }
+    .live-badge.on { border-color: hsl(142 76% 36% / 0.3); color: hsl(142 76% 46%); }
+    .live-badge.on .dot { background: hsl(var(--green)); animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
 
-    .logo-mark svg { color: white; }
-
-    .logo-text {
-      font-size: 20px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--orange-11), var(--amber-11));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: -0.3px;
+    /* ── Tabs ──────────────────────────────────────────────────────────── */
+    .tab-bar {
+      display: inline-flex; border: 1px solid hsl(var(--border));
+      border-radius: var(--radius); overflow: hidden;
     }
-
-    .live-indicator {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 10px;
-      border-radius: 100px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
+    .tab-btn {
+      padding: 6px 14px; border: none; background: transparent;
+      color: hsl(var(--muted-foreground)); cursor: pointer;
+      font-family: inherit; font-size: 13px; font-weight: 500;
+      transition: background 150ms, color 150ms;
     }
+    .tab-btn:hover { background: hsl(var(--accent)); color: hsl(var(--foreground)); }
+    .tab-btn.active { background: hsl(var(--accent)); color: hsl(var(--foreground)); }
 
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      transition: background var(--t-base);
+    /* ── Select ────────────────────────────────────────────────────────── */
+    .select {
+      padding: 6px 32px 6px 12px; border: 1px solid hsl(var(--border));
+      border-radius: var(--radius); background: hsl(var(--background));
+      color: hsl(var(--foreground)); font-family: inherit; font-size: 13px;
+      cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
     }
+    .select:focus { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+    .select option { background: hsl(var(--popover)); }
 
-    .live-indicator.connected { background: var(--green-3); color: var(--green-11); }
-    .live-indicator.connected .live-dot { background: var(--green-9); box-shadow: 0 0 6px var(--green-9); animation: pulse 2s infinite; }
-    .live-indicator.disconnected { background: var(--red-3); color: var(--red-11); }
-    .live-indicator.disconnected .live-dot { background: var(--red-9); }
-
-    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-
-    .header-controls {
-      display: flex;
-      align-items: center;
-      gap: var(--s2);
-      flex-wrap: wrap;
+    /* ── Ghost Button ─────────────────────────────────────────────────── */
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border: 1px solid hsl(var(--border));
+      border-radius: var(--radius); background: transparent;
+      color: hsl(var(--muted-foreground)); font-family: inherit;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background 150ms, color 150ms;
     }
+    .btn-ghost:hover { background: hsl(var(--accent)); color: hsl(var(--foreground)); }
+    .btn-ghost svg { width: 14px; height: 14px; }
 
-    /* ─── Period Buttons (Segmented Control) ───────────────────────────── */
-    .period-group {
-      display: flex;
-      background: var(--bg-element);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--r-md);
-      padding: 3px;
-      gap: 2px;
-    }
+    /* ── Layout ────────────────────────────────────────────────────────── */
+    .main { max-width: 1280px; margin: 0 auto; padding: 24px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-bottom: 24px; }
 
-    .period-btn {
-      padding: var(--s2) var(--s4);
-      border: none;
-      background: transparent;
-      color: var(--text-med);
-      border-radius: var(--r-sm);
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all var(--t-fast) var(--ease-out);
-      white-space: nowrap;
-    }
-
-    .period-btn:hover {
-      color: var(--text-max);
-      background: var(--bg-hover);
-    }
-
-    .period-btn.active {
-      background: var(--accent-solid);
-      color: white;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 0 12px color-mix(in srgb, var(--accent-solid) 25%, transparent);
-    }
-
-    .provider-select {
-      padding: var(--s2) var(--s3);
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-element);
-      color: var(--text-max);
-      border-radius: var(--r-sm);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      outline: none;
-      transition: border-color var(--t-fast) var(--ease-out);
-      appearance: none;
-      -webkit-appearance: none;
-      padding-right: var(--s8);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b8d98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-    }
-
-    .provider-select:hover,
-    .provider-select:focus-visible {
-      border-color: var(--border-hover);
-    }
-
-    .provider-select option {
-      background: var(--bg-subtle);
-      color: var(--text-max);
-    }
-
-    /* ─── Main Layout ──────────────────────────────────────────────────── */
-    .main {
-      padding: var(--s8) var(--s10);
-      max-width: 1520px;
-      margin: 0 auto;
-    }
-
-    /* ─── Provider Badges ──────────────────────────────────────────────── */
-    .provider-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--s2);
-      margin-bottom: var(--s6);
-    }
-
-    .provider-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s2);
-      padding: var(--s2) var(--s3);
-      background: var(--bg-element);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--r-md);
-      transition: all var(--t-fast) var(--ease-out);
-      cursor: default;
-    }
-
-    .provider-badge.active {
-      border-color: var(--blue-7);
-      background: var(--blue-3);
-    }
-
-    .provider-badge .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .provider-badge .status-dot.active {
-      background: var(--success);
-      box-shadow: 0 0 6px color-mix(in srgb, var(--success) 50%, transparent);
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    .provider-badge .name {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-hi);
-    }
-
-    .provider-badge .count {
-      font-size: 11px;
-      color: var(--text-lo);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    /* ─── Hero Stats Grid ──────────────────────────────────────────────── */
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--s4);
-      margin-bottom: var(--s8);
-    }
-
-    .hero-card {
-      background: var(--bg-subtle);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--r-lg);
-      padding: var(--s6);
-      position: relative;
-      overflow: hidden;
-      transition: all var(--t-base) var(--ease-out);
-    }
-
-    .hero-card:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .hero-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      border-radius: 2px 2px 0 0;
-    }
-
-    .hero-card:nth-child(1)::before { background: linear-gradient(90deg, var(--amber-9), var(--orange-9)); }
-    .hero-card:nth-child(2)::before { background: linear-gradient(90deg, var(--blue-9), var(--cyan-9)); }
-    .hero-card:nth-child(3)::before { background: linear-gradient(90deg, var(--violet-9), var(--pink-9)); }
-    .hero-card:nth-child(4)::before { background: linear-gradient(90deg, var(--green-9), var(--cyan-9)); }
-
-    .hero-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: var(--r-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: var(--s3);
-    }
-
-    .hero-card:nth-child(1) .hero-icon { background: var(--amber-3); color: var(--amber-11); }
-    .hero-card:nth-child(2) .hero-icon { background: var(--blue-3); color: var(--blue-11); }
-    .hero-card:nth-child(3) .hero-icon { background: var(--violet-3); color: var(--violet-11); }
-    .hero-card:nth-child(4) .hero-icon { background: var(--green-3); color: var(--green-11); }
-
-    .hero-label {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-lo);
-      margin-bottom: var(--s2);
-    }
-
-    .hero-value {
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      line-height: 1.1;
-      margin-bottom: var(--s1);
-    }
-
-    .hero-card:nth-child(1) .hero-value { color: var(--amber-11); }
-    .hero-card:nth-child(2) .hero-value { color: var(--blue-11); }
-    .hero-card:nth-child(3) .hero-value { color: var(--violet-11); }
-    .hero-card:nth-child(4) .hero-value { color: var(--green-11); }
-
-    .hero-sub {
-      font-size: 12px;
-      color: var(--text-lo);
-      font-weight: 500;
-    }
-
-    /* ─── Grid Layouts ─────────────────────────────────────────────────── */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--s4);
-      margin-bottom: var(--s8);
-    }
-
-    /* ─── Card ─────────────────────────────────────────────────────────── */
+    /* ── Card (shadcn) ─────────────────────────────────────────────────── */
     .card {
-      background: var(--bg-subtle);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--r-lg);
-      padding: var(--s6);
-      transition: border-color var(--t-base) var(--ease-out);
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+    .card-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .card-hd h3 {
+      font-size: 14px; font-weight: 600; color: hsl(var(--foreground));
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card-hd h3 svg { color: hsl(var(--muted-foreground)); width: 16px; height: 16px; }
+
+    /* ── Metric Card ──────────────────────────────────────────────────── */
+    .metric-label {
+      font-size: 13px; font-weight: 500;
+      color: hsl(var(--muted-foreground));
+      margin-bottom: 4px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .metric-label svg { width: 14px; height: 14px; }
+    .metric-value {
+      font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
+      line-height: 1; margin-bottom: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .metric-sub { font-size: 12px; color: hsl(var(--muted-foreground)); }
+
+    /* ── Bar Chart Rows ───────────────────────────────────────────────── */
+    .bar-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+    .bar-row + .bar-row { border-top: 1px solid hsl(var(--border) / 0.5); }
+    .bar-name { width: 120px; font-size: 13px; font-weight: 500; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-track { flex: 1; height: 8px; background: hsl(var(--secondary)); border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 4px; transition: width 400ms ease; }
+    .bar-val { width: 80px; text-align: right; font-size: 13px; font-weight: 500; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
+
+    /* Bar colors — muted, not neon */
+    .fill-a { background: hsl(217 91% 60%); }
+    .fill-b { background: hsl(258 90% 66%); }
+    .fill-c { background: hsl(189 94% 43%); }
+    .fill-d { background: hsl(142 76% 36%); }
+    .fill-e { background: hsl(38 92% 50%); }
+    .fill-f { background: hsl(0 72% 51%); }
+    .fill-g { background: hsl(24 95% 53%); }
+    .fill-h { background: hsl(330 81% 60%); }
+
+    /* ── Token List ───────────────────────────────────────────────────── */
+    .tk-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; }
+    .tk-row + .tk-row { border-top: 1px solid hsl(var(--border) / 0.5); }
+    .tk-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
+    .tk-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .tk-val { font-size: 13px; font-family: 'JetBrains Mono', monospace; font-weight: 500; color: hsl(var(--muted-foreground)); }
+
+    /* ── Table (shadcn) ───────────────────────────────────────────────── */
+    .tbl-wrap { overflow-x: auto; margin: -4px -20px -20px; }
+    .tbl {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+    }
+    .tbl thead th {
+      text-align: left; padding: 10px 16px; font-weight: 500;
+      color: hsl(var(--muted-foreground)); font-size: 12px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      border-bottom: 1px solid hsl(var(--border));
+    }
+    .tbl tbody td { padding: 10px 16px; border-bottom: 1px solid hsl(var(--border) / 0.5); }
+    .tbl tbody tr:last-child td { border-bottom: none; }
+    .tbl tbody tr:hover td { background: hsl(var(--accent) / 0.5); }
+
+    /* ── Badge (provider tag) ─────────────────────────────────────────── */
+    .badge {
+      display: inline-flex; align-items: center; padding: 2px 8px;
+      border-radius: 9999px; font-size: 11px; font-weight: 600;
+      border: 1px solid hsl(var(--border));
+      color: hsl(var(--muted-foreground));
     }
 
-    .card:hover {
-      border-color: var(--border-element);
+    /* ── Tip (Token Advisor) ──────────────────────────────────────────── */
+    .tip {
+      display: flex; gap: 12px; padding: 12px; border-radius: var(--radius);
+      border: 1px solid hsl(var(--border)); margin-bottom: 8px;
     }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: var(--s2);
-      margin-bottom: var(--s5);
-    }
-
-    .card-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: var(--r-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .card-title {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--text-med);
-    }
-
-    /* ─── Bar Charts ───────────────────────────────────────────────────── */
-    .bar-row {
-      display: flex;
-      align-items: center;
-      gap: var(--s3);
-      margin-bottom: var(--s3);
-    }
-
-    .bar-label {
-      width: 120px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-hi);
-      flex-shrink: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .bar-track {
-      flex: 1;
-      height: 26px;
-      background: var(--bg-element);
-      border-radius: var(--r-sm);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .bar-fill {
-      height: 100%;
-      border-radius: var(--r-sm);
-      min-width: 4px;
-      transition: width 0.6s var(--ease-out);
-      display: flex;
-      align-items: center;
-      padding-left: var(--s2);
-    }
-
-    .bar-fill-text {
-      font-size: 10px;
-      font-weight: 700;
-      color: white;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-      white-space: nowrap;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .bar-value {
-      width: 80px;
-      text-align: right;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-med);
-      font-family: 'JetBrains Mono', monospace;
-      flex-shrink: 0;
-    }
-
-    /* Chart color assignments */
-    .bar-c1 { background: linear-gradient(90deg, var(--blue-9), var(--blue-10)); }
-    .bar-c2 { background: linear-gradient(90deg, var(--violet-9), var(--violet-10)); }
-    .bar-c3 { background: linear-gradient(90deg, var(--cyan-9), var(--cyan-10)); }
-    .bar-c4 { background: linear-gradient(90deg, var(--green-9), var(--green-10)); }
-    .bar-c5 { background: linear-gradient(90deg, var(--amber-9), var(--amber-10)); }
-    .bar-c6 { background: linear-gradient(90deg, var(--pink-9), var(--pink-10)); }
-    .bar-c7 { background: linear-gradient(90deg, var(--orange-9), var(--orange-10)); }
-    .bar-c8 { background: linear-gradient(90deg, var(--red-9), var(--red-10)); }
-
-    /* ─── Token Breakdown ──────────────────────────────────────────────── */
-    .token-list { display: flex; flex-direction: column; gap: var(--s2); }
-
-    .token-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--s3) var(--s3);
-      background: var(--bg-element);
-      border-radius: var(--r-sm);
-      transition: background var(--t-fast) var(--ease-out);
-    }
-
-    .token-row:hover { background: var(--bg-hover); }
-
-    .token-row-left {
-      display: flex;
-      align-items: center;
-      gap: var(--s2);
-    }
-
-    .token-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-
-    .token-name {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-hi);
-    }
-
-    .token-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-med);
-    }
-
-    /* ─── Project Table ────────────────────────────────────────────────── */
-    .table-wrap { overflow-x: auto; }
-
-    .project-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .project-table th {
-      text-align: left;
-      padding: var(--s3) var(--s4);
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text-lo);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .project-table td {
-      padding: var(--s3) var(--s4);
-      font-size: 13px;
-      border-bottom: 1px solid var(--bg-element);
-      transition: background var(--t-fast);
-    }
-
-    .project-table tbody tr {
-      cursor: default;
-      transition: background var(--t-fast);
-    }
-
-    .project-table tbody tr:hover td {
-      background: var(--bg-element);
-    }
-
-    .project-table .mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 500;
-    }
-
-    /* Provider tag pill */
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 8px;
-      border-radius: 100px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-    }
-
-    .tag-antigravity  { background: var(--blue-3); color: var(--blue-11); }
-    .tag-claude       { background: var(--violet-3); color: var(--violet-11); }
-    .tag-codex        { background: var(--green-3); color: var(--green-11); }
-    .tag-cursor       { background: var(--cyan-3); color: var(--cyan-11); }
-    .tag-windsurf     { background: var(--orange-3); color: var(--orange-11); }
-    .tag-cline        { background: var(--pink-3); color: var(--pink-11); }
-    .tag-copilot      { background: var(--slate-5); color: var(--slate-11); }
-    .tag-continue     { background: var(--amber-3); color: var(--amber-11); }
-    .tag-aider        { background: var(--red-3); color: var(--red-11); }
-
-    /* ─── Loading / Empty States ───────────────────────────────────────── */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: var(--s16);
-      gap: var(--s5);
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--border-subtle);
-      border-top-color: var(--accent-solid);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loading-text {
-      font-size: 14px;
-      color: var(--text-lo);
-      font-weight: 500;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: var(--s12);
-    }
-
-    .empty-icon {
-      width: 48px;
-      height: 48px;
-      margin: 0 auto var(--s4);
-      color: var(--text-lo);
-      opacity: 0.6;
-    }
-
-    .empty-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: var(--s2);
-      color: var(--text-med);
-    }
-
-    .empty-desc {
-      font-size: 14px;
-      color: var(--text-lo);
-      line-height: 1.6;
-      max-width: 440px;
-      margin: 0 auto;
-    }
-
-    /* ─── Token Saving Tips Panel ──────────────────────────────────────── */
-    .tips-panel {
-      margin-bottom: var(--s8);
-    }
-
-    .tip-item {
-      display: flex;
-      gap: var(--s4);
-      padding: var(--s4) var(--s5);
-      background: var(--bg-element);
-      border-radius: var(--r-md);
-      margin-bottom: var(--s3);
-      border-left: 3px solid;
-      transition: background var(--t-fast) var(--ease-out);
-    }
-
-    .tip-item:hover { background: var(--bg-hover); }
-
-    .tip-item.sev-high { border-left-color: var(--red-9); }
-    .tip-item.sev-medium { border-left-color: var(--amber-9); }
-    .tip-item.sev-low { border-left-color: var(--blue-9); }
-    .tip-item.sev-info { border-left-color: var(--slate-7); }
-
+    .tip:last-child { margin-bottom: 0; }
     .tip-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: var(--r-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
+      width: 32px; height: 32px; border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      background: hsl(var(--secondary)); color: hsl(var(--muted-foreground));
     }
-
-    .tip-item.sev-high .tip-icon { background: var(--red-3); color: var(--red-11); }
-    .tip-item.sev-medium .tip-icon { background: var(--amber-3); color: var(--amber-11); }
-    .tip-item.sev-low .tip-icon { background: var(--blue-3); color: var(--blue-11); }
-    .tip-item.sev-info .tip-icon { background: var(--slate-4); color: var(--slate-11); }
-
-    .tip-content { flex: 1; min-width: 0; }
-
-    .tip-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-max);
-      margin-bottom: 2px;
+    .tip.sev-high .tip-icon { background: hsl(0 72% 51% / 0.15); color: hsl(0 72% 65%); }
+    .tip.sev-medium .tip-icon { background: hsl(38 92% 50% / 0.15); color: hsl(38 92% 60%); }
+    .tip.sev-low .tip-icon { background: hsl(217 91% 60% / 0.15); color: hsl(217 91% 70%); }
+    .tip-body { flex: 1; min-width: 0; }
+    .tip-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+    .tip-desc { font-size: 12px; color: hsl(var(--muted-foreground)); line-height: 1.5; }
+    .tip-meta { display: flex; align-items: center; gap: 12px; margin-top: 6px; flex-wrap: wrap; }
+    .tip-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 1px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600;
+      background: hsl(var(--green) / 0.15); color: hsl(142 76% 50%);
     }
-
-    .tip-desc {
-      font-size: 12px;
-      color: var(--text-med);
-      line-height: 1.5;
-    }
-
-    .tip-savings {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: var(--s2);
-      padding: 2px 8px;
-      border-radius: 100px;
-      font-size: 10px;
-      font-weight: 700;
-      background: var(--green-3);
-      color: var(--green-11);
-    }
-
     .tip-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-top: var(--s2);
-      margin-left: var(--s2);
-      font-size: 11px;
-      color: var(--accent-text);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color var(--t-fast);
+      font-size: 11px; color: hsl(var(--blue)); text-decoration: none; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 4px;
     }
+    .tip-link:hover { text-decoration: underline; }
 
-    .tip-link:hover { color: var(--accent-solid); }
+    /* ── Loading / Empty ───────────────────────────────────────────────── */
+    .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; gap: 16px; }
+    .spinner { width: 32px; height: 32px; border: 2px solid hsl(var(--border)); border-top-color: hsl(var(--foreground)); border-radius: 50%; animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { font-size: 14px; color: hsl(var(--muted-foreground)); }
+    .empty-state { text-align: center; padding: 48px 24px; }
+    .empty-state svg { color: hsl(var(--muted-foreground)); margin-bottom: 12px; }
+    .empty-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .empty-desc { font-size: 13px; color: hsl(var(--muted-foreground)); max-width: 360px; margin: 0 auto; }
 
-    /* ─── Export Button ─────────────────────────────────────────────────── */
-    .btn-export {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s2);
-      padding: var(--s2) var(--s3);
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-element);
-      color: var(--text-med);
-      border-radius: var(--r-sm);
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all var(--t-fast) var(--ease-out);
-    }
-
-    .btn-export:hover {
-      border-color: var(--border-hover);
-      color: var(--text-max);
-      background: var(--bg-hover);
-    }
-
-    /* ─── Footer ───────────────────────────────────────────────────────── */
+    /* ── Footer ────────────────────────────────────────────────────────── */
     .footer {
-      text-align: center;
-      padding: var(--s8) var(--s10);
-      border-top: 1px solid var(--border-subtle);
-      margin-top: var(--s10);
+      text-align: center; padding: 24px; margin-top: 24px;
+      border-top: 1px solid hsl(var(--border));
+      font-size: 12px; color: hsl(var(--muted-foreground));
     }
+    .footer a { color: hsl(var(--muted-foreground)); text-decoration: underline; text-underline-offset: 3px; }
+    .footer a:hover { color: hsl(var(--foreground)); }
 
-    .footer-text {
-      font-size: 12px;
-      color: var(--text-lo);
-      font-weight: 500;
-    }
-
-    .footer-text a {
-      color: var(--accent-text);
-      text-decoration: none;
-      transition: color var(--t-fast);
-    }
-
-    .footer-text a:hover { color: var(--accent-solid); }
-
-    /* ─── Responsive ───────────────────────────────────────────────────── */
-    @media (max-width: 1440px) {
-      .main { max-width: 1280px; }
-    }
-
-    @media (max-width: 1024px) {
-      .hero-stats { grid-template-columns: repeat(2, 1fr); }
-      .grid-2 { grid-template-columns: 1fr; }
-    }
-
+    /* ── Responsive ────────────────────────────────────────────────────── */
+    @media (max-width: 1024px) { .grid-4 { grid-template-columns: repeat(2,1fr); } .grid-2 { grid-template-columns: 1fr; } }
     @media (max-width: 768px) {
-      .header {
-        padding: var(--s4) var(--s5);
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .header-controls { justify-content: center; }
-      .main { padding: var(--s5); }
-      .hero-stats { grid-template-columns: 1fr; }
-      .hero-value { font-size: 26px; }
-      .bar-label { width: 90px; font-size: 12px; }
+      .topbar { flex-direction: column; align-items: stretch; gap: 10px; padding: 12px 16px; }
+      .topbar-right { flex-wrap: wrap; justify-content: center; }
+      .grid-4 { grid-template-columns: 1fr; }
+      .main { padding: 16px; }
+      .metric-value { font-size: 22px; }
+      .bar-name { width: 90px; font-size: 12px; }
     }
-
-    @media (max-width: 375px) {
-      .header { padding: var(--s3) var(--s4); }
-      .main { padding: var(--s3); }
-      .period-group { flex-wrap: wrap; }
-    }
+    @media (max-width: 375px) { .main { padding: 12px; } .tab-bar { flex-wrap: wrap; } }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="header" role="banner">
-    <div class="header-left">
-      <div class="logo-mark" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"/></svg>
+        AG-Code Token
       </div>
-      <span class="logo-text">AG-Code Token</span>
-      <span class="live-indicator disconnected" id="liveIndicator" title="Connection status">
-        <span class="live-dot"></span>
-        <span id="liveLabel">Connecting</span>
-      </span>
+      <span class="live-badge" id="liveIndicator"><span class="dot"></span><span id="liveLabel">Connecting</span></span>
     </div>
-    <div class="header-controls">
-      <div class="period-group" role="tablist" aria-label="Time period">
-        <button class="period-btn active" data-period="today" role="tab" aria-selected="true">Today</button>
-        <button class="period-btn" data-period="week" role="tab" aria-selected="false">7 Days</button>
-        <button class="period-btn" data-period="30days" role="tab" aria-selected="false">30 Days</button>
-        <button class="period-btn" data-period="month" role="tab" aria-selected="false">Month</button>
-        <button class="period-btn" data-period="all" role="tab" aria-selected="false">All Time</button>
+    <div class="topbar-right">
+      <div class="tab-bar" role="tablist" aria-label="Time period">
+        <button class="tab-btn active" data-period="today" role="tab" aria-selected="true">Today</button>
+        <button class="tab-btn" data-period="week" role="tab">7 Days</button>
+        <button class="tab-btn" data-period="30days" role="tab">30 Days</button>
+        <button class="tab-btn" data-period="month" role="tab">Month</button>
+        <button class="tab-btn" data-period="all" role="tab">All Time</button>
       </div>
-      <select class="provider-select" id="providerFilter" aria-label="Filter by provider">
+      <select class="select" id="providerFilter" aria-label="Filter by provider">
         <option value="all">All Providers</option>
       </select>
-      <button class="btn-export" id="exportBtn" title="Export data as CSV">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <button class="btn-ghost" id="exportBtn" title="Export CSV">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Export
       </button>
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="main" id="app" role="main">
     <div class="loading" id="loadingState" aria-live="polite">
-      <div class="spinner" role="status" aria-label="Loading"></div>
+      <div class="spinner"></div>
       <div class="loading-text">Discovering AI coding tools…</div>
     </div>
   </main>
 
   <script>
-    // ─── State ────────────────────────────────────────────────────────────
+    // ─── State ──────────────────────────────────────────────────────────────
     let currentPeriod = 'today';
     let currentProvider = 'all';
     let summaryData = null;
     let providersData = null;
     let tipsData = null;
+    let wrappedData = null;
 
-    // Radix-based provider color tokens
-    const PROVIDER_COLORS = {
-      antigravity: { bar: 'bar-c1', dot: 'var(--blue-9)' },
-      claude:      { bar: 'bar-c2', dot: 'var(--violet-9)' },
-      codex:       { bar: 'bar-c4', dot: 'var(--green-9)' },
-      cursor:      { bar: 'bar-c3', dot: 'var(--cyan-9)' },
-      windsurf:    { bar: 'bar-c7', dot: 'var(--orange-9)' },
-      cline:       { bar: 'bar-c6', dot: 'var(--pink-9)' },
-      copilot:     { bar: 'bar-c1', dot: 'var(--slate-9)' },
-      continue:    { bar: 'bar-c5', dot: 'var(--amber-9)' },
-      aider:       { bar: 'bar-c8', dot: 'var(--red-9)' },
+    const FILL = ['fill-a','fill-b','fill-c','fill-d','fill-e','fill-f','fill-g','fill-h'];
+    const TK_COLORS = ['hsl(217 91% 60%)','hsl(258 90% 66%)','hsl(189 94% 43%)','hsl(38 92% 50%)','hsl(330 81% 60%)'];
+
+    // ─── Icons (Lucide inline SVGs — 16×16) ─────────────────────────────
+    // Only the minimal set needed, no bloat
+    const I = {
+      dollar:   '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      coins:    '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg>',
+      zap:      '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>',
+      monitor:  '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+      brain:    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/></svg>',
+      plug:     '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8Z"/></svg>',
+      chart:    '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 16l4-8 4 4 4-10"/></svg>',
+      wrench:   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+      folder:   '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>',
+      lightbulb:'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>',
+      warn:     '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+      extLink:  '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>',
+      search:   '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
+      alertBig: '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+      trendDown:'<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>',
     };
 
-    const BAR_CLASSES = ['bar-c1','bar-c2','bar-c3','bar-c4','bar-c5','bar-c6','bar-c7','bar-c8'];
+    // ─── Formatting ─────────────────────────────────────────────────────
+    function fmtCost(v){if(!v)return'$0.00';if(v<0.01)return'$'+v.toFixed(4);if(v<1)return'$'+v.toFixed(3);return'$'+v.toFixed(2);}
+    function fmtTok(n){if(!n)return'0';if(n<1e3)return n.toString();if(n<1e6)return(n/1e3).toFixed(1)+'K';if(n<1e9)return(n/1e6).toFixed(2)+'M';return(n/1e9).toFixed(2)+'B';}
+    function fmtNum(n){return(n||0).toLocaleString();}
 
-    // ─── Formatting ───────────────────────────────────────────────────────
-    function formatCost(usd) {
-      if (usd === 0) return '$0.00';
-      if (usd < 0.01) return '$' + usd.toFixed(4);
-      if (usd < 1) return '$' + usd.toFixed(3);
-      return '$' + usd.toFixed(2);
-    }
+    // ─── API ────────────────────────────────────────────────────────────
+    async function fetchJSON(url){const r=await fetch(url);return r.json();}
 
-    function formatTokens(n) {
-      if (n === 0) return '0';
-      if (n < 1000) return n.toString();
-      if (n < 1_000_000) return (n / 1000).toFixed(1) + 'K';
-      if (n < 1_000_000_000) return (n / 1_000_000).toFixed(2) + 'M';
-      return (n / 1_000_000_000).toFixed(2) + 'B';
-    }
-
-    function formatNumber(n) { return n.toLocaleString(); }
-
-    // SVG icon helper (Lucide-compatible inline SVGs)
-    const ICONS = {
-      dollar: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>',
-      coins: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"></circle><path d="M18.09 10.37A6 6 0 1 1 10.34 18"></path><path d="M7 6h1v4"></path><path d="m16.71 13.88.7.71-2.82 2.82"></path></svg>',
-      zap: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>',
-      monitor: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>',
-      brain: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg>',
-      plug: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"></path><path d="M9 8V2"></path><path d="M15 8V2"></path><path d="M18 8v5a6 6 0 0 1-6 6v0a6 6 0 0 1-6-6V8Z"></path></svg>',
-      chart: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M7 16l4-8 4 4 4-10"></path></svg>',
-      wrench: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>',
-      folder: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path></svg>',
-      search: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>',
-      alertTriangle: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
-      lightbulb: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
-      arrowDown: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="m19 12-7 7-7-7"></path></svg>',
-      externalLink: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>',
-    };
-
-    // ─── API ──────────────────────────────────────────────────────────────
-    async function fetchJSON(url) {
-      const res = await fetch(url);
-      return res.json();
-    }
-
-    async function loadProviders() {
-      providersData = await fetchJSON('/api/providers');
-      const select = document.getElementById('providerFilter');
-      select.innerHTML = '<option value="all">All Providers</option>';
-      for (const p of providersData.all) {
-        const active = providersData.active.find(a => a.name === p.name);
-        const opt = document.createElement('option');
-        opt.value = p.name;
-        opt.textContent = active ? `${p.displayName} (${active.sessionCount})` : p.displayName;
-        if (!active) opt.disabled = true;
-        select.appendChild(opt);
+    async function loadProviders(){
+      providersData=await fetchJSON('/api/providers');
+      const s=document.getElementById('providerFilter');
+      s.innerHTML='<option value="all">All Providers</option>';
+      for(const p of providersData.all){
+        const a=providersData.active.find(x=>x.name===p.name);
+        const o=document.createElement('option');
+        o.value=p.name;o.textContent=a?`${p.displayName} (${a.sessionCount})`:p.displayName;
+        if(!a)o.disabled=true;s.appendChild(o);
       }
     }
 
-    async function loadSummary() {
-      summaryData = await fetchJSON(`/api/summary?period=${currentPeriod}&provider=${currentProvider}`);
+    async function loadSummary(){
+      summaryData=await fetchJSON(`/api/summary?period=${currentPeriod}&provider=${currentProvider}`);
       render();
     }
 
-    // ─── Render ───────────────────────────────────────────────────────────
-    function render() {
-      const app = document.getElementById('app');
-      if (!summaryData) return;
-      const d = summaryData;
+    // ─── Render ─────────────────────────────────────────────────────────
+    function render(){
+      const app=document.getElementById('app');
+      if(!summaryData)return;
+      const d=summaryData;
 
-      if (d.totalApiCalls === 0 && d.projectCount === 0) {
-        app.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">${ICONS.search}</div>
-            <div class="empty-title">No usage data for this period</div>
-            <div class="empty-desc">
-              No AI coding sessions found for "${d.period}".
-              Try selecting a longer time range or check that your AI tools have session data on disk.
-            </div>
-          </div>`;
+      if(d.totalApiCalls===0&&d.projectCount===0){
+        app.innerHTML=`<div class="empty-state">${I.search}<div class="empty-title">No usage data for this period</div><div class="empty-desc">No AI coding sessions found for "${d.period}". Try selecting a longer time range.</div></div>`;
         return;
       }
 
-      const totalTokens = d.totalInputTokens + d.totalOutputTokens +
-        d.totalCacheReadTokens + d.totalCacheWriteTokens + d.totalReasoningTokens;
+      const totalTok=d.totalInputTokens+d.totalOutputTokens+d.totalCacheReadTokens+d.totalCacheWriteTokens+d.totalReasoningTokens;
 
-      app.innerHTML = `
-        <!-- Active Providers -->
-        ${providersData?.active?.length > 0 ? `
-        <div class="provider-badges">
-          ${providersData.active.map(p => `
-            <div class="provider-badge ${currentProvider === 'all' || currentProvider === p.name ? 'active' : ''}">
-              <div class="status-dot active"></div>
-              <span class="name">${p.displayName}</span>
-              <span class="count">${p.sessionCount}</span>
-            </div>
-          `).join('')}
-        </div>` : ''}
-
-        <!-- Hero Stats -->
-        <div class="hero-stats">
-          <div class="hero-card">
-            <div class="hero-icon">${ICONS.dollar}</div>
-            <div class="hero-label">Total Cost</div>
-            <div class="hero-value">${formatCost(d.totalCostUSD)}</div>
-            <div class="hero-sub">${d.period}</div>
+      app.innerHTML=`
+        <!-- Metrics -->
+        <div class="grid-4">
+          <div class="card">
+            <div class="metric-label">${I.dollar} Total Cost</div>
+            <div class="metric-value">${fmtCost(d.totalCostUSD)}</div>
+            <div class="metric-sub">${d.period}</div>
           </div>
-          <div class="hero-card">
-            <div class="hero-icon">${ICONS.coins}</div>
-            <div class="hero-label">Total Tokens</div>
-            <div class="hero-value">${formatTokens(totalTokens)}</div>
-            <div class="hero-sub">${formatTokens(d.totalInputTokens)} in · ${formatTokens(d.totalOutputTokens)} out</div>
+          <div class="card">
+            <div class="metric-label">${I.coins} Total Tokens</div>
+            <div class="metric-value">${fmtTok(totalTok)}</div>
+            <div class="metric-sub">${fmtTok(d.totalInputTokens)} in · ${fmtTok(d.totalOutputTokens)} out</div>
           </div>
-          <div class="hero-card">
-            <div class="hero-icon">${ICONS.zap}</div>
-            <div class="hero-label">API Calls</div>
-            <div class="hero-value">${formatNumber(d.totalApiCalls)}</div>
-            <div class="hero-sub">across ${d.projectCount} project${d.projectCount !== 1 ? 's' : ''}</div>
+          <div class="card">
+            <div class="metric-label" style="color: hsl(var(--magenta, 290 80% 60%))">${I.zap} Tokscale Rank</div>
+            <div class="metric-value" style="font-size: 18px; display:flex; align-items:center; height: 28px; color: hsl(var(--magenta, 290 80% 60%))">${wrappedData?.rank || 'Unknown'}</div>
+            <div class="metric-sub">Lifetime Leaderboard Standing</div>
           </div>
-          <div class="hero-card">
-            <div class="hero-icon">${ICONS.monitor}</div>
-            <div class="hero-label">Active IDEs</div>
-            <div class="hero-value">${d.providers?.length || 0}</div>
-            <div class="hero-sub">${d.providers?.map(p => p.displayName).join(', ') || 'None'}</div>
+          <div class="card">
+            <div class="metric-label">${I.zap} API Calls</div>
+            <div class="metric-value">${fmtNum(d.totalApiCalls)}</div>
+            <div class="metric-sub">across ${d.projectCount} project${d.projectCount!==1?'s':''}</div>
+          </div>
+          <div class="card">
+            <div class="metric-label">${I.monitor} Active IDEs</div>
+            <div class="metric-value">${d.providers?.length||0}</div>
+            <div class="metric-sub">${d.providers?.map(p=>p.displayName).join(', ')||'None'}</div>
           </div>
         </div>
 
-        <!-- Models + Providers -->
+        <!-- Model + Provider -->
         <div class="grid-2">
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:var(--violet-3);color:var(--violet-11)">${ICONS.brain}</div>
-              <div class="card-title">Model Breakdown</div>
-            </div>
-            ${d.models?.length > 0 ? d.models.map((m, i) => {
-              const pct = d.totalCostUSD > 0 ? (m.costUSD / d.totalCostUSD * 100) : 0;
-              return `<div class="bar-row">
-                <div class="bar-label">${m.name}</div>
-                <div class="bar-track">
-                  <div class="bar-fill ${BAR_CLASSES[i % BAR_CLASSES.length]}" style="width:${Math.max(pct, 2)}%">
-                    ${pct > 15 ? `<span class="bar-fill-text">${pct.toFixed(0)}%</span>` : ''}
-                  </div>
-                </div>
-                <div class="bar-value">${formatCost(m.costUSD)}</div>
-              </div>`;
-            }).join('') : '<div class="empty-state"><div class="empty-desc">No model data</div></div>'}
+            <div class="card-hd"><h3>${I.brain} Model Breakdown</h3></div>
+            ${d.models?.length>0?d.models.map((m,i)=>{
+              const pct=d.totalCostUSD>0?(m.costUSD/d.totalCostUSD*100):0;
+              return`<div class="bar-row"><div class="bar-name">${m.name}</div><div class="bar-track"><div class="bar-fill ${FILL[i%FILL.length]}" style="width:${Math.max(pct,2)}%"></div></div><div class="bar-val">${fmtCost(m.costUSD)}</div></div>`;
+            }).join(''):'<div class="empty-desc muted">No model data</div>'}
           </div>
-
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:var(--blue-3);color:var(--blue-11)">${ICONS.plug}</div>
-              <div class="card-title">Provider Breakdown</div>
-            </div>
-            ${d.providers?.length > 0 ? d.providers.map((p) => {
-              const pct = d.totalCostUSD > 0 ? (p.costUSD / d.totalCostUSD * 100) : 0;
-              const cls = PROVIDER_COLORS[p.name]?.bar || 'bar-c1';
-              return `<div class="bar-row">
-                <div class="bar-label">${p.displayName}</div>
-                <div class="bar-track">
-                  <div class="bar-fill ${cls}" style="width:${Math.max(pct, 2)}%">
-                    ${pct > 15 ? `<span class="bar-fill-text">${pct.toFixed(0)}%</span>` : ''}
-                  </div>
-                </div>
-                <div class="bar-value">${formatCost(p.costUSD)}</div>
-              </div>`;
-            }).join('') : '<div class="empty-state"><div class="empty-desc">No provider data</div></div>'}
+            <div class="card-hd"><h3>${I.plug} Provider Breakdown</h3></div>
+            ${d.providers?.length>0?d.providers.map((p,i)=>{
+              const pct=d.totalCostUSD>0?(p.costUSD/d.totalCostUSD*100):0;
+              return`<div class="bar-row"><div class="bar-name">${p.displayName}</div><div class="bar-track"><div class="bar-fill ${FILL[i%FILL.length]}" style="width:${Math.max(pct,2)}%"></div></div><div class="bar-val">${fmtCost(p.costUSD)}</div></div>`;
+            }).join(''):'<div class="empty-desc muted">No provider data</div>'}
           </div>
         </div>
 
-        <!-- Token Breakdown + Tools -->
+        <!-- 2D / 3D Contribution Graphs -->
         <div class="grid-2">
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:var(--cyan-3);color:var(--cyan-11)">${ICONS.chart}</div>
-              <div class="card-title">Token Breakdown</div>
-            </div>
-            <div class="token-list">
-              <div class="token-row">
-                <div class="token-row-left">
-                  <div class="token-dot" style="background:var(--blue-9)"></div>
-                  <span class="token-name">Input Tokens</span>
-                </div>
-                <span class="token-value">${formatTokens(d.totalInputTokens)}</span>
-              </div>
-              <div class="token-row">
-                <div class="token-row-left">
-                  <div class="token-dot" style="background:var(--violet-9)"></div>
-                  <span class="token-name">Output Tokens</span>
-                </div>
-                <span class="token-value">${formatTokens(d.totalOutputTokens)}</span>
-              </div>
-              <div class="token-row">
-                <div class="token-row-left">
-                  <div class="token-dot" style="background:var(--cyan-9)"></div>
-                  <span class="token-name">Cache Read</span>
-                </div>
-                <span class="token-value">${formatTokens(d.totalCacheReadTokens)}</span>
-              </div>
-              <div class="token-row">
-                <div class="token-row-left">
-                  <div class="token-dot" style="background:var(--amber-9)"></div>
-                  <span class="token-name">Cache Write</span>
-                </div>
-                <span class="token-value">${formatTokens(d.totalCacheWriteTokens)}</span>
-              </div>
-              <div class="token-row">
-                <div class="token-row-left">
-                  <div class="token-dot" style="background:var(--pink-9)"></div>
-                  <span class="token-name">Reasoning</span>
-                </div>
-                <span class="token-value">${formatTokens(d.totalReasoningTokens)}</span>
-              </div>
-            </div>
+            <div class="card-hd"><h3>${I.chart} Token Heatmap (2D)</h3></div>
+            <div id="heatmap2d" style="height:180px;width:100%"></div>
           </div>
-
           <div class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:var(--green-3);color:var(--green-11)">${ICONS.wrench}</div>
-              <div class="card-title">Tool Usage</div>
-            </div>
-            ${d.tools?.length > 0 ? d.tools.slice(0, 10).map((t, i) => {
-              const maxCalls = d.tools[0].calls;
-              const pct = maxCalls > 0 ? (t.calls / maxCalls * 100) : 0;
-              return `<div class="bar-row">
-                <div class="bar-label">${t.name}</div>
-                <div class="bar-track">
-                  <div class="bar-fill ${BAR_CLASSES[i % BAR_CLASSES.length]}" style="width:${Math.max(pct, 2)}%">
-                    ${pct > 20 ? `<span class="bar-fill-text">${t.calls}</span>` : ''}
-                  </div>
-                </div>
-                <div class="bar-value">${formatNumber(t.calls)}</div>
-              </div>`;
-            }).join('') : '<div class="empty-state"><div class="empty-desc">No tool data</div></div>'}
+            <div class="card-hd"><h3>${I.chart} Token Skyline (3D)</h3></div>
+            <div id="graph3d" style="height:250px;width:100%"></div>
           </div>
         </div>
 
-        <!-- Projects Table -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon" style="background:var(--amber-3);color:var(--amber-11)">${ICONS.folder}</div>
-            <div class="card-title">Projects</div>
+        <!-- Tokens + Tools -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-hd"><h3>${I.chart} Token Breakdown</h3></div>
+            ${[['Input Tokens',d.totalInputTokens,0],['Output Tokens',d.totalOutputTokens,1],['Cache Read',d.totalCacheReadTokens,2],['Cache Write',d.totalCacheWriteTokens,3],['Reasoning',d.totalReasoningTokens,4]].map(([name,val,ci])=>`
+            <div class="tk-row"><div class="tk-left"><div class="tk-dot" style="background:${TK_COLORS[ci]}"></div>${name}</div><div class="tk-val">${fmtTok(val)}</div></div>`).join('')}
           </div>
-          ${d.projects?.length > 0 ? `
-          <div class="table-wrap">
-            <table class="project-table">
-              <thead>
+          <div class="card">
+            <div class="card-hd"><h3>${I.wrench} Tool Usage</h3></div>
+            ${d.tools?.length>0?d.tools.slice(0,10).map((t,i)=>{
+              const pct=d.tools[0].calls>0?(t.calls/d.tools[0].calls*100):0;
+              return`<div class="bar-row"><div class="bar-name">${t.name}</div><div class="bar-track"><div class="bar-fill ${FILL[i%FILL.length]}" style="width:${Math.max(pct,2)}%"></div></div><div class="bar-val">${fmtNum(t.calls)}</div></div>`;
+            }).join(''):'<div class="empty-desc muted">No tool data</div>'}
+          </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="card" style="margin-bottom:24px">
+          <div class="card-hd"><h3>${I.folder} Projects</h3></div>
+          ${d.projects?.length>0?`
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>Project</th><th>IDE</th><th>Cost</th><th>API Calls</th><th>Input</th><th>Output</th></tr></thead>
+              <tbody>${d.projects.slice(0,20).map(p=>`
                 <tr>
-                  <th>Project</th>
-                  <th>IDE</th>
-                  <th>Cost</th>
-                  <th>API Calls</th>
-                  <th>Input Tokens</th>
-                  <th>Output Tokens</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${d.projects.slice(0, 20).map(p => `
-                <tr>
-                  <td style="font-weight:600;color:var(--text-max)">${p.project}</td>
-                  <td><span class="tag tag-${p.provider}">${p.providerDisplayName}</span></td>
-                  <td class="mono" style="color:var(--amber-11)">${formatCost(p.costUSD)}</td>
-                  <td class="mono">${formatNumber(p.apiCalls)}</td>
-                  <td class="mono">${formatTokens(p.inputTokens)}</td>
-                  <td class="mono">${formatTokens(p.outputTokens)}</td>
-                </tr>
-                `).join('')}
+                  <td style="font-weight:600">${p.project}</td>
+                  <td><span class="badge">${p.providerDisplayName}</span></td>
+                  <td class="mono">${fmtCost(p.costUSD)}</td>
+                  <td class="mono">${fmtNum(p.apiCalls)}</td>
+                  <td class="mono">${fmtTok(p.inputTokens)}</td>
+                  <td class="mono">${fmtTok(p.outputTokens)}</td>
+                </tr>`).join('')}
               </tbody>
             </table>
-          </div>` : '<div class="empty-state"><div class="empty-desc">No projects</div></div>'}
+          </div>`:'<div class="empty-desc muted">No projects</div>'}
         </div>
 
         <!-- Token Saving Advisor -->
-        ${tipsData?.tips?.length > 0 ? `
-        <div class="card tips-panel">
-          <div class="card-header">
-            <div class="card-icon" style="background:var(--green-3);color:var(--green-11)">${ICONS.lightbulb}</div>
-            <div class="card-title">Token Saving Advisor</div>
-          </div>
-          ${tipsData.tips.map(tip => `
-          <div class="tip-item sev-${tip.severity}">
-            <div class="tip-icon">${tip.severity === 'high' ? ICONS.alertTriangle.replace(/36/g, '14') : tip.severity === 'medium' ? ICONS.lightbulb : ICONS.chart}</div>
-            <div class="tip-content">
+        ${tipsData?.tips?.length>0?`
+        <div class="card" style="margin-bottom:24px">
+          <div class="card-hd"><h3>${I.lightbulb} Token Saving Advisor</h3></div>
+          ${tipsData.tips.map(tip=>`
+          <div class="tip sev-${tip.severity}">
+            <div class="tip-icon">${tip.severity==='high'?I.warn:tip.severity==='medium'?I.lightbulb:I.chart}</div>
+            <div class="tip-body">
               <div class="tip-title">${tip.title}</div>
               <div class="tip-desc">${tip.description}</div>
-              <div>
-                ${tip.savings ? `<span class="tip-savings">${ICONS.arrowDown} ${tip.savings}</span>` : ''}
-                ${tip.link ? `<a class="tip-link" href="${tip.link}" target="_blank" rel="noopener">${ICONS.externalLink} Learn more</a>` : ''}
+              <div class="tip-meta">
+                ${tip.savings?`<span class="tip-pill">${I.trendDown} ${tip.savings}</span>`:''}
+                ${tip.link?`<a class="tip-link" href="${tip.link}" target="_blank" rel="noopener">${I.extLink} Learn more</a>`:''}
               </div>
             </div>
-          </div>
-          `).join('')}
-        </div>` : ''}
+          </div>`).join('')}
+        </div>`:''}
 
-        <!-- Footer -->
         <footer class="footer">
-          <div class="footer-text">
-            AG-Code Token v1.1.0 · Built with
-            <a href="https://github.com/vuckuola619/ag-code-token" target="_blank" rel="noopener">open source</a>
-            · <a href="/api/export?period=${currentPeriod}&provider=${currentProvider}&format=csv" download>Export CSV</a>
-          </div>
+          AG-Code Token v1.2.0 ·
+          <a href="https://github.com/vuckuola619/ag-code-token" target="_blank" rel="noopener">GitHub</a> ·
+          <a href="/api/export?period=${currentPeriod}&provider=${currentProvider}&format=csv" download>Export CSV</a>
         </footer>
-       `;
+      `;
+
+      setTimeout(() => renderCharts(d.timeseries), 0);
     }
 
-    // ─── Event Listeners ──────────────────────────────────────────────────
-    document.querySelectorAll('.period-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.period-btn').forEach(b => {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
-        });
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-        currentPeriod = btn.dataset.period;
-        loadSummary();
+    let heatmapChart = null;
+    let skylineChart = null;
+
+    function renderCharts(ts) {
+      if (!ts || ts.length === 0) return;
+      const dom2d = document.getElementById('heatmap2d');
+      const dom3d = document.getElementById('graph3d');
+      if (!dom2d || !dom3d || typeof echarts === 'undefined') return;
+
+      if (heatmapChart) heatmapChart.dispose();
+      if (skylineChart) skylineChart.dispose();
+
+      heatmapChart = echarts.init(dom2d);
+      skylineChart = echarts.init(dom3d);
+
+      let maxVal = 0;
+      ts.forEach(item => { if (item[1] > maxVal) maxVal = item[1]; });
+
+      const lastDate = ts[ts.length - 1][0];
+      const year = lastDate.split('-')[0];
+
+      heatmapChart.setOption({
+        tooltip: { position: 'top', formatter: p => `${p.data[0]}: ${fmtTok(p.data[1])} tokens` },
+        visualMap: { min: 0, max: maxVal, show: false, inRange: { color: ['#18181b', '#10b981'] } }, // GitHub green
+        calendar: {
+          top: 20, right: 10, left: 30, bottom: 20,
+          range: year,
+          cellSize: ['auto', 16],
+          itemStyle: { color: '#27272a', borderWidth: 3, borderColor: '#09090b', borderRadius: 2 },
+          splitLine: { show: false }, yearLabel: { show: false },
+          dayLabel: { color: '#a1a1aa', nameMap: 'EN' },
+          monthLabel: { color: '#a1a1aa', nameMap: 'EN' }
+        },
+        series: { type: 'heatmap', coordinateSystem: 'calendar', data: ts }
+      });
+
+      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const weeks = [];
+      for(let i=0; i<53; i++) weeks.push(`W${i}`);
+
+      const data3d = [];
+      ts.forEach(item => {
+        const d = new Date(item[0]);
+        const start = new Date(d.getFullYear(), 0, 1);
+        const w = Math.floor((((d - start) / 86400000) + start.getDay() + 1) / 7);
+        data3d.push([w, d.getDay(), item[1]]);
+      });
+
+      skylineChart.setOption({
+        tooltip: {},
+        visualMap: { min: 0, max: maxVal, show: false, inRange: { color: ['#27272a', '#a855f7'] } }, // Tokscale purple
+        xAxis3D: { type: 'category', data: weeks, name: '' },
+        yAxis3D: { type: 'category', data: days, name: '' },
+        zAxis3D: { type: 'value', name: '' },
+        grid3D: {
+          boxWidth: 200, boxDepth: 40, boxHeight: 40,
+          viewControl: { alpha: 40, beta: 20, distance: 250 },
+          axisLine: { lineStyle: { color: '#3f3f46' } },
+          axisLabel: { textStyle: { color: '#a1a1aa', fontSize: 10 } },
+          splitLine: { lineStyle: { color: '#27272a' } },
+          axisPointer: { show: false }
+        },
+        series: [{ type: 'bar3D', data: data3d, shading: 'realistic', label: { show: false } }]
+      });
+
+      window.addEventListener('resize', () => { setTimeout(() => { heatmapChart.resize(); skylineChart.resize(); }, 100); });
+    }
+
+    // ─── Event Listeners ────────────────────────────────────────────────
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false');});
+        btn.classList.add('active');btn.setAttribute('aria-selected','true');
+        currentPeriod=btn.dataset.period;loadSummary();
       });
     });
+    document.getElementById('providerFilter').addEventListener('change',e=>{currentProvider=e.target.value;loadSummary();});
+    document.getElementById('exportBtn').addEventListener('click',()=>{window.open(`/api/export?period=${currentPeriod}&provider=${currentProvider}&format=csv`,'_blank');});
 
-    document.getElementById('providerFilter').addEventListener('change', (e) => {
-      currentProvider = e.target.value;
-      loadSummary();
-    });
-
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      window.open(`/api/export?period=${currentPeriod}&provider=${currentProvider}&format=csv`, '_blank');
-    });
-
-    // ─── Real-Time SSE Connection ─────────────────────────────────────────
-    let eventSource = null;
-    let sseReconnectTimer = null;
-
-    function updateLiveIndicator(connected) {
-      const el = document.getElementById('liveIndicator');
-      const label = document.getElementById('liveLabel');
-      if (connected) {
-        el.className = 'live-indicator connected';
-        label.textContent = 'Live';
-      } else {
-        el.className = 'live-indicator disconnected';
-        label.textContent = 'Offline';
-      }
+    // ─── SSE ────────────────────────────────────────────────────────────
+    let sse=null;
+    function setLive(on){
+      const el=document.getElementById('liveIndicator'),lb=document.getElementById('liveLabel');
+      el.className=on?'live-badge on':'live-badge';lb.textContent=on?'Live':'Offline';
+    }
+    function connectSSE(){
+      if(sse)try{sse.close();}catch{}
+      try{
+        sse=new EventSource('/api/events');
+        sse.addEventListener('connected',()=>setLive(true));
+        sse.addEventListener('session-update',()=>{loadSummary();fetchJSON('/api/tips').then(d=>{tipsData=d;}).catch(()=>{});});
+        sse.addEventListener('heartbeat',()=>setLive(true));
+        sse.addEventListener('shutdown',()=>setLive(false));
+        sse.onerror=()=>{setLive(false);sse.close();setTimeout(connectSSE,5000);};
+      }catch{setLive(false);setInterval(()=>loadSummary(),60000);}
     }
 
-    function connectSSE() {
-      if (eventSource) {
-        try { eventSource.close(); } catch {}
-      }
-      try {
-        eventSource = new EventSource('/api/events');
-
-        eventSource.addEventListener('connected', () => {
-          updateLiveIndicator(true);
-        });
-
-        eventSource.addEventListener('session-update', (e) => {
-          // Real-time update: reload data when files change
-          loadSummary();
-          fetchJSON('/api/tips').then(data => { tipsData = data; }).catch(() => {});
-        });
-
-        eventSource.addEventListener('heartbeat', () => {
-          updateLiveIndicator(true);
-        });
-
-        eventSource.addEventListener('shutdown', () => {
-          updateLiveIndicator(false);
-        });
-
-        eventSource.onerror = () => {
-          updateLiveIndicator(false);
-          eventSource.close();
-          // Reconnect after 5 seconds
-          sseReconnectTimer = setTimeout(connectSSE, 5000);
-        };
-      } catch {
-        updateLiveIndicator(false);
-        // Fallback to polling if EventSource unavailable
-        setInterval(() => loadSummary(), 60 * 1000);
-      }
-    }
-
-    // ─── Init ─────────────────────────────────────────────────────────────
-    async function init() {
-      try {
+    // ─── Init ───────────────────────────────────────────────────────────
+    async function init(){
+      try{
         await loadProviders();
-        // Load tips in parallel with summary
-        fetchJSON('/api/tips').then(data => { tipsData = data; }).catch(() => {});
+        fetchJSON('/api/tips').then(d=>{tipsData=d;}).catch(()=>{});
+        fetchJSON('/api/wrapped').then(d=>{wrappedData=d; render();}).catch(()=>{});
         await loadSummary();
-        // Start real-time connection
         connectSSE();
-      } catch (err) {
-        document.getElementById('app').innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">${ICONS.alertTriangle}</div>
-            <div class="empty-title">Connection Error</div>
-            <div class="empty-desc">Could not connect to the AG-Code Token server. Make sure it's running on port 3777.</div>
-          </div>`;
-        updateLiveIndicator(false);
+      }catch{
+        document.getElementById('app').innerHTML=`<div class="empty-state">${I.alertBig}<div class="empty-title">Connection Error</div><div class="empty-desc">Could not connect to the server. Make sure it's running on port 3777.</div></div>`;
+        setLive(false);
       }
     }
-
     init();
-
-    // Fallback: poll every 5 min in case SSE drops silently
-    setInterval(() => {
-      if (!eventSource || eventSource.readyState === EventSource.CLOSED) {
-        loadSummary();
-      }
-    }, 5 * 60 * 1000);
+    setInterval(()=>{if(!sse||sse.readyState===EventSource.CLOSED)loadSummary();},300000);
   </script>
 </body>
 </html>

@@ -163,6 +163,23 @@ async function handleAPI(req, res) {
       return json(res, results);
     }
 
+    if (path === '/api/wrapped') {
+      const summary = await getAggregateSummary('all', params.provider);
+      const totalTokens = summary.totalInputTokens + summary.totalOutputTokens + summary.totalCacheReadTokens;
+      
+      let rank = 'Type 0 (Local Scripter)';
+      if (totalTokens > 10_000_000) rank = 'Type III (Galactic Architect)';
+      else if (totalTokens > 1_000_000) rank = 'Type II (Stellar Developer)';
+      else if (totalTokens > 100_000) rank = 'Type I (Planetary Coder)';
+
+      return json(res, {
+        totalTokens,
+        totalCostUSD: summary.totalCostUSD,
+        rank,
+        topModels: summary.models.sort((a,b) => b.tokens - a.tokens).slice(0, 3)
+      });
+    }
+
     // ─── Export API (CSV + JSON) with CSV injection protection ────────
     if (path === '/api/export') {
       const { range } = getDateRange(params.period);

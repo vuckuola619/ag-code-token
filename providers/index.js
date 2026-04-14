@@ -28,6 +28,8 @@ import { cline } from './cline.js';
 import { continuedev } from './continuedev.js';
 import { copilot } from './copilot.js';
 import { aider } from './aider.js';
+import { extendedProviders } from './extended.js';
+import { sqliteProviders } from './sqlite_providers.js';
 
 /** All registered providers — order matters for display priority */
 export const providers = [
@@ -40,6 +42,8 @@ export const providers = [
   copilot,      // GitHub Copilot
   continuedev,  // Continue.dev
   aider,        // Aider CLI
+  ...sqliteProviders, // OpenCode, Hermes, etc (SQLite heuristics)
+  ...extendedProviders, // Gemini, Pi, Droid, Qwen, etc (JSON long-tail)
 ];
 
 /**

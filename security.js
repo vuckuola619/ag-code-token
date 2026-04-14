@@ -102,7 +102,7 @@ export function applySecurityHeaders(res) {
     "default-src 'self'",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src https://fonts.gstatic.com",
-    "script-src 'self' 'unsafe-inline'",  // inline JS in single-file dashboard
+    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",  // inline JS in single-file dashboard + ECharts
     "img-src 'self' data:",
     "connect-src 'self'",
     "frame-ancestors 'none'",

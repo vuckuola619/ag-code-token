@@ -206,6 +206,8 @@ export async function getAggregateSummary(period = 'week', providerFilter = 'all
   let totalCacheWrite = 0;
   let totalReasoning = 0;
   let totalCalls = 0;
+  
+  const dailyTotals = {};
 
   for (const proj of projects) {
     totalCost += proj.totalCostUSD;
@@ -215,6 +217,13 @@ export async function getAggregateSummary(period = 'week', providerFilter = 'all
     totalCacheWrite += proj.totalCacheWriteTokens;
     totalReasoning += proj.totalReasoningTokens;
     totalCalls += proj.totalApiCalls;
+
+    for (const call of proj.calls) {
+      if (!call.timestamp) continue;
+      const dS = call.timestamp.slice(0, 10); // Extract YYYY-MM-DD
+      if (!dailyTotals[dS]) dailyTotals[dS] = 0;
+      dailyTotals[dS] += (call.inputTokens || 0) + (call.outputTokens || 0);
+    }
 
     for (const [model, data] of Object.entries(proj.modelBreakdown)) {
       if (!modelTotals[model]) modelTotals[model] = { calls: 0, costUSD: 0, inputTokens: 0, outputTokens: 0 };
@@ -246,6 +255,7 @@ export async function getAggregateSummary(period = 'week', providerFilter = 'all
     totalReasoningTokens: totalReasoning,
     totalApiCalls: totalCalls,
     projectCount: projects.length,
+    timeseries: Object.entries(dailyTotals).sort((a,b) => a[0].localeCompare(b[0])),
     models: Object.entries(modelTotals).sort(([, a], [, b]) => b.costUSD - a.costUSD).map(([name, d]) => ({ name, ...d })),
     tools: Object.entries(toolTotals).sort(([, a], [, b]) => b.calls - a.calls).map(([name, d]) => ({ name, ...d })),
     providers: Object.entries(providerTotals).sort(([, a], [, b]) => b.costUSD - a.costUSD).map(([name, d]) => ({ name, ...d })),
