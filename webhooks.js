@@ -1,5 +1,5 @@
 /**
- * AG-Code Token — Webhook Integrations
+ * Wasted Token Tracker — Webhook Integrations
  *
  * Supports:
  *   - Slack (Incoming Webhooks)
@@ -7,7 +7,7 @@
  *   - Telegram (Bot API)
  *   - Generic HTTP (POST JSON)
  *
- * Config persisted at ~/.ag-code-token/webhooks.json.
+ * Config persisted at ~/.wasted-token-tracker/webhooks.json.
  * Zero npm dependencies — uses only Node.js built-in fetch.
  */
 
@@ -18,7 +18,7 @@ import { existsSync } from 'fs';
 import { auditLog } from './security.js';
 
 // ─── Configuration ─────────────────────────────────────────────────────────────
-const AG_DIR = join(homedir(), '.ag-code-token');
+const AG_DIR = join(homedir(), '.wasted-token-tracker');
 const WEBHOOKS_CONFIG_PATH = join(AG_DIR, 'webhooks.json');
 const MAX_RETRIES = 2;
 const TIMEOUT_MS = 10_000;
@@ -93,7 +93,7 @@ function formatSlackMessage(event, data) {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `:chart_with_upwards_trend: *AG-Code Token Daily Summary*\n• Cost: $${data.totalCostUSD?.toFixed(2)}\n• Tokens: ${formatTokens(data.totalInputTokens + data.totalOutputTokens)}\n• API Calls: ${data.totalApiCalls}\n• Projects: ${data.projectCount}`,
+        text: `:chart_with_upwards_trend: *Wasted Token Tracker Daily Summary*\n• Cost: $${data.totalCostUSD?.toFixed(2)}\n• Tokens: ${formatTokens(data.totalInputTokens + data.totalOutputTokens)}\n• API Calls: ${data.totalApiCalls}\n• Projects: ${data.projectCount}`,
       },
     });
   }
@@ -116,7 +116,7 @@ function formatDiscordMessage(event, data) {
         description: `**${alert.period}**: $${alert.spent.toFixed(2)} / $${alert.budget.toFixed(2)} (${alert.percent}%)`,
         color,
         timestamp: new Date().toISOString(),
-        footer: { text: 'AG-Code Token' },
+        footer: { text: 'Wasted Token Tracker' },
       });
     }
   } else if (event === 'daily_summary') {
@@ -130,7 +130,7 @@ function formatDiscordMessage(event, data) {
         { name: 'Projects', value: String(data.projectCount || 0), inline: true },
       ],
       timestamp: new Date().toISOString(),
-      footer: { text: 'AG-Code Token' },
+      footer: { text: 'Wasted Token Tracker' },
     });
   }
 
@@ -156,7 +156,7 @@ function formatTelegramMessage(event, data) {
 function formatGenericMessage(event, data) {
   return {
     event,
-    source: 'ag-code-token',
+    source: 'wasted-token-tracker',
     timestamp: new Date().toISOString(),
     data,
   };

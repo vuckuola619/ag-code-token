@@ -1,19 +1,19 @@
 #!/usr/bin/env node
 /**
- * AG-Code Token — System Tray Launcher
+ * Wasted Token Tracker — System Tray Launcher
  *
  * Lightweight cross-platform tray application that:
- *   - Starts the AG-Code Token server as a background process
+ *   - Starts the Wasted Token Tracker server as a background process
  *   - Shows a system tray icon with quick-access menu
  *   - Opens the dashboard in the default browser
  *   - Shows budget alert notifications via OS native notifications
  *
  * No Electron needed — uses Node.js child_process + open.
- * For a full GUI tray, install optional: `npm install -g ag-code-token-tray`
+ * For a full GUI tray, install optional: `npm install -g wasted-token-tracker-tray`
  *
  * Usage:
- *   ag-token tray          # Start server in background + open browser
- *   ag-token tray --detach # Start server as detached process
+ *   wasted-token tray          # Start server in background + open browser
+ *   wasted-token tray --detach # Start server as detached process
  */
 
 import { spawn, execSync } from 'child_process';
@@ -25,9 +25,9 @@ import { homedir, platform } from 'os';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SERVER_PATH = join(__dirname, '..', 'server.js');
 const PORT = process.env.PORT || 3777;
-const HOST = process.env.AG_TOKEN_HOST || '127.0.0.1';
+const HOST = process.env.WASTED_TOKEN_HOST || '127.0.0.1';
 const DASHBOARD_URL = `http://${HOST}:${PORT}`;
-const PID_FILE = join(homedir(), '.ag-code-token', 'server.pid');
+const PID_FILE = join(homedir(), '.wasted-token-tracker', 'server.pid');
 
 // ANSI colors
 const c = {
@@ -89,7 +89,7 @@ function notify(title, body) {
 export async function startTray(options = {}) {
   const { detach = false } = options;
 
-  console.log(`\n${c.bold}${c.cyan}🖥️  AG-Code Token — System Tray Mode${c.reset}\n`);
+  console.log(`\n${c.bold}${c.cyan}🖥️  Wasted Token Tracker — System Tray Mode${c.reset}\n`);
 
   // Check if already running
   const existingPid = isServerRunning();
@@ -106,13 +106,13 @@ export async function startTray(options = {}) {
     const child = spawn('node', [SERVER_PATH], {
       detached: true,
       stdio: 'ignore',
-      env: { ...process.env, AG_TOKEN_TRAY: '1' },
+      env: { ...process.env, WASTED_TOKEN_TRAY: '1' },
     });
     child.unref();
 
     // Save PID
     const { mkdirSync, writeFileSync } = await import('fs');
-    mkdirSync(join(homedir(), '.ag-code-token'), { recursive: true });
+    mkdirSync(join(homedir(), '.wasted-token-tracker'), { recursive: true });
     writeFileSync(PID_FILE, String(child.pid));
 
     console.log(`${c.green}✓ Server started (PID: ${child.pid})${c.reset}`);
@@ -121,10 +121,10 @@ export async function startTray(options = {}) {
     // Wait a moment then open browser
     setTimeout(() => {
       openBrowser(DASHBOARD_URL);
-      notify('AG-Code Token', `Dashboard running at ${DASHBOARD_URL}`);
+      notify('Wasted Token Tracker', `Dashboard running at ${DASHBOARD_URL}`);
     }, 2000);
 
-    console.log(`\n${c.gray}To stop: ag-token tray --stop${c.reset}\n`);
+    console.log(`\n${c.gray}To stop: wasted-token tray --stop${c.reset}\n`);
     return;
   }
 
@@ -133,13 +133,13 @@ export async function startTray(options = {}) {
 
   const child = spawn('node', [SERVER_PATH], {
     stdio: 'inherit',
-    env: { ...process.env, AG_TOKEN_TRAY: '1' },
+    env: { ...process.env, WASTED_TOKEN_TRAY: '1' },
   });
 
   // Open browser after server starts
   setTimeout(() => {
     openBrowser(DASHBOARD_URL);
-    notify('AG-Code Token', `Dashboard ready at ${DASHBOARD_URL}`);
+    notify('Wasted Token Tracker', `Dashboard ready at ${DASHBOARD_URL}`);
   }, 3000);
 
   child.on('close', (code) => {
@@ -183,6 +183,6 @@ export function trayStatus() {
     console.log(`  Dashboard: ${DASHBOARD_URL}`);
   } else {
     console.log(`${c.gray}○ Server not running${c.reset}`);
-    console.log(`  Start: ag-token tray`);
+    console.log(`  Start: wasted-token tray`);
   }
 }

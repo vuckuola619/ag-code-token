@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 /**
- * AG-Code Token CLI — v1.3.0
+ * Wasted Token Tracker CLI — v1.3.0
  * 
  * Commands:
- *   ag-token              # Show usage summary in terminal
- *   ag-token summary      # Same as default
- *   ag-token submit       # Generate leaderboard profile
- *   ag-token tray         # Start server + open browser
- *   ag-token tray --detach # Start server in background
- *   ag-token tray --stop  # Stop background server
- *   ag-token tray --status # Check server status
- *   ag-token budget       # Show budget status
- *   ag-token budget --set-daily 10  # Set daily budget
- *   ag-token currency     # Show current currency
- *   ag-token currency EUR # Switch to Euro
- *   ag-token export       # Export data as JSON
- *   ag-token export --csv # Export data as CSV
+ *   wasted-token              # Show usage summary in terminal
+ *   wasted-token summary      # Same as default
+ *   wasted-token submit       # Generate leaderboard profile
+ *   wasted-token tray         # Start server + open browser
+ *   wasted-token tray --detach # Start server in background
+ *   wasted-token tray --stop  # Stop background server
+ *   wasted-token tray --status # Check server status
+ *   wasted-token budget       # Show budget status
+ *   wasted-token budget --set-daily 10  # Set daily budget
+ *   wasted-token currency     # Show current currency
+ *   wasted-token currency EUR # Switch to Euro
+ *   wasted-token export       # Export data as JSON
+ *   wasted-token export --csv # Export data as CSV
  */
 
 import { getAggregateSummary } from './parser.js';
@@ -66,7 +66,7 @@ function getTokscaleRank(totalTokens) {
 // ─── Commands ──────────────────────────────────────────────────────────────────
 
 async function cmdSummary() {
-  console.log(`\n${c.bold}${c.cyan}⚡ AG-Code Token v1.3.0${c.reset}\n`);
+  console.log(`\n${c.bold}${c.cyan}⚡ Wasted Token Tracker v1.3.0${c.reset}\n`);
   process.stdout.write(`${c.gray}Loading...${c.reset}\r`);
 
   await loadPricing();
@@ -114,7 +114,7 @@ async function cmdSummary() {
     console.log(`  ${c.dim}·${c.reset} ${m.name}: ${fmtNum(m.inputTokens + m.outputTokens)} tokens (${fmtCost(m.costUSD)})`);
   }
 
-  console.log(`\n  ${c.gray}Commands: ag-token budget | currency | tray | submit | export${c.reset}\n`);
+  console.log(`\n  ${c.gray}Commands: wasted-token budget | currency | tray | submit | export${c.reset}\n`);
 }
 
 async function cmdBudget(args) {
@@ -167,7 +167,7 @@ async function cmdBudget(args) {
     }
   }
 
-  console.log(`\n  ${c.gray}Set budgets: ag-token budget --set-daily 10 --set-weekly 50 --set-monthly 200${c.reset}\n`);
+  console.log(`\n  ${c.gray}Set budgets: wasted-token budget --set-daily 10 --set-weekly 50 --set-monthly 200${c.reset}\n`);
 }
 
 async function cmdCurrency(args) {
@@ -186,7 +186,7 @@ async function cmdCurrency(args) {
     const marker = code === getCurrentCurrency() ? `${c.green}●${c.reset}` : `${c.gray}○${c.reset}`;
     console.log(`  ${marker} ${code}  ${info.symbol}  ${info.name}`);
   }
-  console.log(`\n  ${c.gray}Switch: ag-token currency EUR${c.reset}\n`);
+  console.log(`\n  ${c.gray}Switch: wasted-token currency EUR${c.reset}\n`);
 }
 
 async function cmdExport(args) {
@@ -210,11 +210,11 @@ async function cmdExport(args) {
   if (format === 'csv') {
     const head = Object.keys(rows[0] || {}).join(',');
     const body = rows.map(r => Object.values(r).join(',')).join('\n');
-    const outPath = join(process.cwd(), `ag-code-token-${period}.csv`);
+    const outPath = join(process.cwd(), `wasted-token-tracker-${period}.csv`);
     await writeFile(outPath, head + '\n' + body);
     console.log(`\n${c.green}✓ Exported to ${outPath}${c.reset}\n`);
   } else {
-    const outPath = join(process.cwd(), `ag-code-token-${period}.json`);
+    const outPath = join(process.cwd(), `wasted-token-tracker-${period}.json`);
     await writeFile(outPath, JSON.stringify({ period, rows }, null, 2));
     console.log(`\n${c.green}✓ Exported to ${outPath}${c.reset}\n`);
   }
@@ -253,26 +253,26 @@ async function cmdTray(args) {
 
 function cmdHelp() {
   console.log(`
-${c.bold}${c.cyan}AG-Code Token v1.3.0${c.reset} — Universal AI Token Monitor
+${c.bold}${c.cyan}Wasted Token Tracker v1.3.0${c.reset} — Universal AI Token Monitor
 
 ${c.bold}USAGE${c.reset}
-  ag-token                      Show usage summary
-  ag-token summary              Same as default
-  ag-token budget               Show budget status
-  ag-token budget --set-daily N Set daily budget (USD)
-  ag-token currency             Show/list currencies
-  ag-token currency EUR         Switch to Euro
-  ag-token export               Export data as JSON
-  ag-token export --csv         Export data as CSV
-  ag-token tray                 Start server + open browser
-  ag-token tray --detach        Start server in background
-  ag-token tray --stop          Stop background server
-  ag-token tray --status        Check server status
-  ag-token submit               Generate leaderboard profile
-  ag-token help                 Show this help
+  wasted-token                      Show usage summary
+  wasted-token summary              Same as default
+  wasted-token budget               Show budget status
+  wasted-token budget --set-daily N Set daily budget (USD)
+  wasted-token currency             Show/list currencies
+  wasted-token currency EUR         Switch to Euro
+  wasted-token export               Export data as JSON
+  wasted-token export --csv         Export data as CSV
+  wasted-token tray                 Start server + open browser
+  wasted-token tray --detach        Start server in background
+  wasted-token tray --stop          Stop background server
+  wasted-token tray --status        Check server status
+  wasted-token submit               Generate leaderboard profile
+  wasted-token help                 Show this help
 
 ${c.bold}PROGRAMMATIC USAGE${c.reset}
-  import { getSummary } from 'ag-code-token';
+  import { getSummary } from 'wasted-token-tracker';
   const data = await getSummary('today');
 
 ${c.bold}DOCKER${c.reset}

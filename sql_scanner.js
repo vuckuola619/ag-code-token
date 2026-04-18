@@ -1,7 +1,7 @@
 /**
  * Zero-dependency heuristic string/JSON scanner for SQLite files.
  *
- * Since AG-Code Token strictly prohibits `better-sqlite3` and other compiled native dependencies,
+ * Since Wasted Token Tracker strictly prohibits `better-sqlite3` and other compiled native dependencies,
  * we use byte-scanning heuristics to extract usage data from .db files (e.g. OpenCode, Hermes).
  * SQLite databases usually store strings uncompressed in pages, making them extractable.
  *

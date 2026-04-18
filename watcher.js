@@ -1,5 +1,5 @@
 /**
- * AG-Code Token — Real-Time File Watcher
+ * Wasted Token Tracker — Real-Time File Watcher
  *
  * Monitors session directories for changes using fs.watch(),
  * providing real-time dashboard updates via Server-Sent Events.

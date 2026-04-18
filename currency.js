@@ -1,5 +1,5 @@
 /**
- * AG-Code Token — Multi-Currency Support
+ * Wasted Token Tracker — Multi-Currency Support
  *
  * Converts USD costs to 12+ currencies with:
  *   - Offline fallback rates (hardcoded, always available)
@@ -7,7 +7,7 @@
  *   - User-configurable preferred currency
  *   - Symbol/locale formatting
  *
- * Config persisted at ~/.ag-code-token/currency.json.
+ * Config persisted at ~/.wasted-token-tracker/currency.json.
  * Zero npm dependencies.
  */
 
@@ -18,7 +18,7 @@ import { existsSync } from 'fs';
 import { auditLog } from './security.js';
 
 // ─── Configuration ─────────────────────────────────────────────────────────────
-const AG_DIR = join(homedir(), '.ag-code-token');
+const AG_DIR = join(homedir(), '.wasted-token-tracker');
 const CURRENCY_CONFIG_PATH = join(AG_DIR, 'currency.json');
 const RATES_CACHE_PATH = join(AG_DIR, 'exchange-rates.json');
 const RATES_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours

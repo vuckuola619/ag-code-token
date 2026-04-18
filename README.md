@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="public/screenshot.png" alt="AG-Code Token — Universal AI Token Monitor" width="820" />
+  <img src="public/screenshot.png" alt="Wasted Token Tracker — Universal AI Token Monitor" width="820" />
 </p>
 
-<h1 align="center">AG-Code Token</h1>
+<h1 align="center">Wasted Token Tracker</h1>
 
 <p align="center">
   <strong>Universal AI token usage monitor for every coding IDE and agent.</strong>
@@ -35,7 +35,7 @@
 
 You use AI coding tools daily — Claude Code, Codex, Cursor, perhaps Copilot. Each burns through tokens at different rates with different pricing. But there is **no unified view** of where your money goes.
 
-**AG-Code Token** reads the session files your tools already write to disk, normalizes them into a common format, and renders a real-time dashboard. No API keys. No external services. No data leaves your machine.
+**Wasted Token Tracker** reads the session files your tools already write to disk, normalizes them into a common format, and renders a real-time dashboard. No API keys. No external services. No data leaves your machine.
 
 ---
 
@@ -106,7 +106,7 @@ Configurable spending thresholds with real-time breach detection:
 - Per-provider budgets (optional)
 - Warning levels at 50%, 80%, 100%, and 150%
 - Cooldown-based notification suppression
-- Breach history tracking in `~/.ag-code-token/budgets.json`
+- Breach history tracking in `~/.wasted-token-tracker/budgets.json`
 
 ### Webhook Integrations
 Automated notifications to external services:
@@ -137,7 +137,7 @@ docker compose up -d
 ### npm Package
 Programmatic API for CI/CD integration:
 ```javascript
-import { getSummary, getProviders } from 'ag-code-token';
+import { getSummary, getProviders } from 'wasted-token-tracker';
 const today = await getSummary('today');
 console.log(`Cost: $${today.totalCostUSD.toFixed(2)}`);
 ```
@@ -204,7 +204,7 @@ Pricing data for **50+ models** across 10 providers, refreshed automatically fro
 ## Architecture
 
 ```
-ag-code-token/
+wasted-token-tracker/
 ├── server.js                # HTTP server, API routing, SSE, auth
 ├── models.js                # LLM pricing engine (LiteLLM + 56 hardcoded fallbacks)
 ├── parser.js                # Discovery -> parse -> deduplicate -> aggregate pipeline
@@ -356,15 +356,15 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for complete guidelines.
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PORT` | `3777` | HTTP server port |
-| `AG_TOKEN_HOST` | `127.0.0.1` | Bind address |
-| `AG_TOKEN_AUTH` | — | Set to `required` to enforce Bearer token auth |
-| `AG_TOKEN_NO_AUTH` | — | Set to `1` to disable authentication entirely |
+| `WASTED_TOKEN_HOST` | `127.0.0.1` | Bind address |
+| `WASTED_TOKEN_AUTH` | — | Set to `required` to enforce Bearer token auth |
+| `WASTED_TOKEN_NO_AUTH` | — | Set to `1` to disable authentication entirely |
 | `CLAUDE_CONFIG_DIR` | `~/.claude` | Claude Code configuration directory |
 | `CODEX_HOME` | `~/.codex` | Codex CLI home directory |
 | `ANTIGRAVITY_DIR` | `~/.gemini/antigravity` | Antigravity data directory |
 
 ```bash
-PORT=8080 AG_TOKEN_AUTH=required node server.js
+PORT=8080 WASTED_TOKEN_AUTH=required node server.js
 ```
 
 ---
@@ -374,7 +374,7 @@ PORT=8080 AG_TOKEN_AUTH=required node server.js
 <details>
 <summary><strong>Do I need to run npm install?</strong></summary>
 
-No. AG-Code Token uses only Node.js built-in modules. Run `node server.js` directly.
+No. Wasted Token Tracker uses only Node.js built-in modules. Run `node server.js` directly.
 </details>
 
 <details>
@@ -394,7 +394,7 @@ Each provider plugin knows the default filesystem paths where its tool stores se
 
 Yes. Use any process manager:
 ```bash
-npx pm2 start server.js --name ag-code-token
+npx pm2 start server.js --name wasted-token-tracker
 ```
 </details>
 

@@ -1,4 +1,4 @@
-# Contributing to AG-Code Token
+# Contributing to Wasted Token Tracker
 
 Thank you for your interest in contributing. This guide covers the most common contribution paths.
 

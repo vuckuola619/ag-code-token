@@ -1,25 +1,25 @@
 # ────────────────────────────────────────────
-# AG-Code Token — Docker Compose
+# Wasted Token Tracker — Docker Compose
 #
 # Usage: docker compose up -d
 # ────────────────────────────────────────────
 
 services:
-  ag-code-token:
+  wasted-token-tracker:
     build: .
-    image: ag-code-token:latest
-    container_name: ag-code-token
+    image: wasted-token-tracker:latest
+    container_name: wasted-token-tracker
     restart: unless-stopped
     ports:
       - "3777:3777"
     environment:
       - PORT=3777
-      - AG_TOKEN_HOST=0.0.0.0
-      - AG_TOKEN_AUTH=required
+      - WASTED_TOKEN_HOST=0.0.0.0
+      - WASTED_TOKEN_AUTH=required
       - NODE_ENV=production
     volumes:
       # Persistent config & audit logs
-      - ag-token-config:/home/agtoken/.ag-code-token
+      - wasted-token-config:/home/agtoken/.wasted-token-tracker
 
       # AI coding tool session directories (read-only)
       # Uncomment the ones you use:
@@ -44,5 +44,5 @@ services:
           cpus: '0.5'
 
 volumes:
-  ag-token-config:
+  wasted-token-config:
     driver: local

@@ -1,15 +1,15 @@
 /**
- * AG-Code Token — Programmatic API
+ * Wasted Token Tracker — Programmatic API
  *
  * npm package entry point. Allows programmatic usage:
  *
- *   import { getSummary, getProviders, loadPricing } from 'ag-code-token';
+ *   import { getSummary, getProviders, loadPricing } from 'wasted-token-tracker';
  *
  *   await loadPricing();
  *   const summary = await getSummary('today');
  *   console.log(`Today's cost: $${summary.totalCostUSD.toFixed(2)}`);
  *
- * @module ag-code-token
+ * @module wasted-token-tracker
  */
 
 // ─── Core Exports ──────────────────────────────────────────────────────────────
@@ -48,7 +48,7 @@ export {
  * @returns {Promise<Object>} Aggregate summary
  *
  * @example
- * import { getSummary } from 'ag-code-token';
+ * import { getSummary } from 'wasted-token-tracker';
  * const today = await getSummary('today');
  * console.log(`Cost: $${today.totalCostUSD.toFixed(2)}`);
  */
@@ -65,7 +65,7 @@ export async function getSummary(period = 'week', provider = 'all') {
  * @returns {Promise<Object[]>} Array of { name, displayName, sessionCount }
  *
  * @example
- * import { getProviders } from 'ag-code-token';
+ * import { getProviders } from 'wasted-token-tracker';
  * const providers = await getProviders();
  * for (const p of providers) {
  *   console.log(`${p.displayName}: ${p.sessionCount} sessions`);
@@ -96,4 +96,4 @@ export async function exportData(period = 'week', provider = 'all') {
  * Package metadata.
  */
 export const VERSION = '1.3.0';
-export const NAME = 'ag-code-token';
+export const NAME = 'wasted-token-tracker';

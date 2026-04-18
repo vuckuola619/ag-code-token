@@ -170,13 +170,6 @@ function renderBudgetCard() {
     </div>`;
   }).join('');
 
-  const hasBudget = periods.some(p => budgetData.spending[p]?.budget);
-  return `<div class="card">
-    <div class="card-hd"><h3>${I.shield} Budget Status</h3></div>
-    ${hasBudget ? rows : '<div class="no-budget">No budgets configured. Set via CLI: <code style="background:hsl(var(--secondary));padding:2px 6px;border-radius:4px;font-size:11px">ag-token budget --set-daily 10</code></div>'}
-  </div>`;
-}
-
 // ─── Render ─────────────────────────────────────────────────────────────────────
 function render() {
   const app = document.getElementById('app');
@@ -190,12 +183,9 @@ function render() {
 
   const totalTok = d.totalInputTokens + d.totalOutputTokens + d.totalCacheReadTokens + d.totalCacheWriteTokens + d.totalReasoningTokens;
 
-  app.innerHTML = `
-    <!-- Budget Alerts -->
-    ${renderBudgetAlerts()}
-
-    <!-- Metrics -->
-    <div class="grid-4">
+  const widgetsData = {
+    metrics: `<div class="grid-4" style="position:relative;">
+      <div class="card-drag-handle" title="Drag to reorder">${I.wrench}</div>
       <div class="card">
         <div class="metric-label">${I.dollar} Total Cost</div>
         <div class="metric-value">${fmtCost(d.totalCostUSD)}</div>
@@ -221,10 +211,10 @@ function render() {
         <div class="metric-value">${d.providers?.length || 0}</div>
         <div class="metric-sub">${d.providers?.map(p => esc(p.displayName)).join(', ') || 'None'}</div>
       </div>
-    </div>
+    </div>`,
 
-    <!-- Cost Trend Chart + Budget Status -->
-    <div class="grid-2">
+    trends: `<div class="grid-2" style="position:relative;">
+      <div class="card-drag-handle" title="Drag to reorder">${I.wrench}</div>
       <div class="card">
         <div class="card-hd">
           <h3>${I.trendUp} Cost Trend</h3>
@@ -236,10 +226,10 @@ function render() {
         <div id="trendChart" class="trend-chart"></div>
       </div>
       ${renderBudgetCard()}
-    </div>
+    </div>`,
 
-    <!-- Model + Provider -->
-    <div class="grid-2">
+    models: `<div class="grid-2" style="position:relative;">
+      <div class="card-drag-handle" title="Drag to reorder">${I.wrench}</div>
       <div class="card">
         <div class="card-hd"><h3>${I.brain} Model Breakdown</h3></div>
         ${d.models?.length > 0 ? d.models.map((m, i) => {
@@ -254,10 +244,10 @@ function render() {
           return `<div class="bar-row"><div class="bar-name">${esc(p.displayName)}</div><div class="bar-track"><div class="bar-fill ${FILL[i % FILL.length]}" style="width:${Math.max(pct, 2)}%"></div></div><div class="bar-val">${fmtCost(p.costUSD)}</div></div>`;
         }).join('') : '<div class="empty-desc muted">No provider data</div>'}
       </div>
-    </div>
+    </div>`,
 
-    <!-- 2D / 3D Contribution Graphs -->
-    <div class="grid-2">
+    heatmap: `<div class="grid-2" style="position:relative;">
+      <div class="card-drag-handle" title="Drag to reorder">${I.wrench}</div>
       <div class="card">
         <div class="card-hd"><h3>${I.chart} Token Heatmap (2D)</h3></div>
         <div id="heatmap2d" style="height:180px;width:100%"></div>
@@ -266,10 +256,10 @@ function render() {
         <div class="card-hd"><h3>${I.chart} Token Skyline (3D)</h3></div>
         <div id="graph3d" style="height:250px;width:100%"></div>
       </div>
-    </div>
+    </div>`,
 
-    <!-- Tokens + Tools -->
-    <div class="grid-2">
+    tokens: `<div class="grid-2" style="position:relative;">
+      <div class="card-drag-handle" title="Drag to reorder">${I.wrench}</div>
       <div class="card">
         <div class="card-hd"><h3>${I.chart} Token Breakdown</h3></div>
         ${[['Input Tokens', d.totalInputTokens, 0], ['Output Tokens', d.totalOutputTokens, 1], ['Cache Read', d.totalCacheReadTokens, 2], ['Cache Write', d.totalCacheWriteTokens, 3], ['Reasoning', d.totalReasoningTokens, 4]].map(([name, val, ci]) => `
@@ -282,10 +272,10 @@ function render() {
           return `<div class="bar-row"><div class="bar-name">${esc(t.name)}</div><div class="bar-track"><div class="bar-fill ${FILL[i % FILL.length]}" style="width:${Math.max(pct, 2)}%"></div></div><div class="bar-val">${fmtNum(t.calls)}</div></div>`;
         }).join('') : '<div class="empty-desc muted">No tool data</div>'}
       </div>
-    </div>
+    </div>`,
 
-    <!-- Projects -->
-    <div class="card" style="margin-bottom:24px">
+    projects: `<div class="card" style="margin-bottom:24px; position:relative;">
+      <div class="card-drag-handle" title="Drag to reorder">${I.wrench}</div>
       <div class="card-hd"><h3>${I.folder} Projects</h3></div>
       ${d.projects?.length > 0 ? `
       <div class="tbl-wrap">
@@ -303,11 +293,10 @@ function render() {
           </tbody>
         </table>
       </div>` : '<div class="empty-desc muted">No projects</div>'}
-    </div>
+    </div>`,
 
-    <!-- Token Saving Advisor -->
-    ${tipsData?.tips?.length > 0 ? `
-    <div class="card" style="margin-bottom:24px">
+    advisor: tipsData?.tips?.length > 0 ? `<div class="card" style="margin-bottom:24px; position:relative;">
+      <div class="card-drag-handle" title="Drag to reorder">${I.wrench}</div>
       <div class="card-hd"><h3>${I.lightbulb} Token Saving Advisor</h3></div>
       ${tipsData.tips.map(tip => {
         const href = safeHref(tip.link);
@@ -323,10 +312,22 @@ function render() {
           </div>
         </div>
       </div>`; }).join('')}
-    </div>` : ''}
+    </div>` : ''
+  };
 
+  const defaultOrder = ['metrics', 'trends', 'models', 'heatmap', 'tokens', 'projects', 'advisor'];
+  const savedOrderRaw = localStorage.getItem('ag-widget-order');
+  const savedOrder = savedOrderRaw ? savedOrderRaw.split('|') : defaultOrder;
+  const activeOrder = [...new Set([...savedOrder, ...defaultOrder])].filter(k => widgetsData[k]);
+
+  app.innerHTML = `
+    <!-- Budget Alerts -->
+    ${renderBudgetAlerts()}
+    <div id="dashboardWidgets">
+      ${activeOrder.map(k => `<div class="widget" data-id="${k}">${widgetsData[k]}</div>`).join('')}
+    </div>
     <footer class="footer">
-      AG-Code Token v1.3.0 ·
+      Wasted Token Tracker v1.3.0 ·
       <a href="https://github.com/vuckuola619/wasted-token-tracker" target="_blank" rel="noopener">GitHub</a> ·
       <a href="#" id="footerExport">Export CSV</a> ·
       Currency: ${esc(currentCurrency)}
@@ -346,6 +347,33 @@ function render() {
       loadTrends().then(() => renderTrendChart());
     });
   });
+
+  // Initialize SortableJS
+  const widgetContainer = document.getElementById('dashboardWidgets');
+  if (widgetContainer && typeof Sortable !== 'undefined') {
+    Sortable.create(widgetContainer, {
+      handle: '.card-drag-handle',
+      animation: 150,
+      ghostClass: 'sortable-ghost',
+      store: {
+        get: function (sortable) {
+          const order = localStorage.getItem('ag-widget-order');
+          return order ? order.split('|') : [];
+        },
+        set: function (sortable) {
+          const order = sortable.toArray();
+          localStorage.setItem('ag-widget-order', order.join('|'));
+        }
+      }
+    });
+  }
+
+  if (chartTimer) clearTimeout(chartTimer);
+  chartTimer = setTimeout(() => {
+    try { renderCharts(d.timeseries); } catch (e) { /* chart render error */ }
+    try { renderTrendChart(); } catch (e) { /* trend chart error */ }
+  }, 250);
+}
 
   if (chartTimer) clearTimeout(chartTimer);
   chartTimer = setTimeout(() => {
@@ -516,7 +544,7 @@ async function doExport() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `ag-code-token-${currentPeriod}.csv`;
+    a.download = `wasted-token-tracker-${currentPeriod}.csv`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -585,8 +613,43 @@ function connectSSE() {
   } catch { setLive(false); setInterval(() => loadSummary(), 60000); }
 }
 
+// ─── Theme Toggle ───────────────────────────────────────────────────────────────
+function initTheme() {
+  const btn = document.getElementById('themeToggleBtn');
+  if (!btn) return;
+  const sunIcon = document.querySelector('.sun-icon');
+  const moonIcon = document.querySelector('.moon-icon');
+  
+  const savedTheme = localStorage.getItem('ag-theme') || 'dark';
+  document.documentElement.className = savedTheme;
+  
+  const updateIcons = () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    sunIcon.style.display = isDark ? 'block' : 'none';
+    moonIcon.style.display = isDark ? 'none' : 'block';
+  };
+  updateIcons();
+
+  btn.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    if (isDark) {
+      document.documentElement.className = '';
+      localStorage.setItem('ag-theme', 'light');
+    } else {
+      document.documentElement.className = 'dark';
+      localStorage.setItem('ag-theme', 'dark');
+    }
+    updateIcons();
+    // Re-render charts to pick up theme colors
+    if (trendChart) try { trendChart.resize(); } catch {}
+    if (heatmapChart) try { heatmapChart.resize(); } catch {}
+    if (skylineChart) try { skylineChart.resize(); } catch {}
+  });
+}
+
 // ─── Init ───────────────────────────────────────────────────────────────────────
 async function init() {
+  initTheme();
   try {
     await loadProviders();
     await loadCurrencies();

@@ -48,7 +48,7 @@ function getBrainDir() {
 // ─── Model Hints Configuration ─────────────────────────────────────────────────
 // Since Antigravity .pb files are fully binary-compressed (no readable model strings),
 // model detection relies on a user-configurable hints file:
-//   ~/.config/ag-code-token/model_hints.json
+//   ~/.config/wasted-token-tracker/model_hints.json
 //
 // Format:
 // {
@@ -60,8 +60,8 @@ function getBrainDir() {
 // }
 
 const MODEL_HINTS_PATHS = [
-  join(homedir(), '.config', 'ag-code-token', 'model_hints.json'),
-  join(homedir(), '.ag-code-token', 'model_hints.json'),
+  join(homedir(), '.config', 'wasted-token-tracker', 'model_hints.json'),
+  join(homedir(), '.wasted-token-tracker', 'model_hints.json'),
 ];
 
 let _hintsCache = null;
@@ -104,7 +104,7 @@ export function getModelHintsPath() {
 export async function saveModelHints(hints) {
   const hintsPath = MODEL_HINTS_PATHS[0];
   const { mkdir, writeFile: wf } = await import('fs/promises');
-  await mkdir(join(homedir(), '.config', 'ag-code-token'), { recursive: true });
+  await mkdir(join(homedir(), '.config', 'wasted-token-tracker'), { recursive: true });
   await wf(hintsPath, JSON.stringify(hints, null, 2) + '\n');
   _hintsCache = hints;
   _hintsCacheTime = Date.now();

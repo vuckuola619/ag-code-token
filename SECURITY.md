@@ -10,7 +10,7 @@
 
 ## Architecture Security Model
 
-AG-Code Token is designed with **security-by-default** principles:
+Wasted Token Tracker is designed with **security-by-default** principles:
 
 ### Data Privacy (GDPR Compliant)
 - **No PII Collection** -- Only reads token counts, model names, and file sizes
@@ -21,9 +21,9 @@ AG-Code Token is designed with **security-by-default** principles:
 - **Right to Erasure** -- `DELETE /api/cache` purges all in-memory data
 
 ### Authentication
-- **Bearer Token Auth** -- Auto-generated 32-byte hex token, persisted at `~/.ag-code-token/auth-secret`
+- **Bearer Token Auth** -- Auto-generated 32-byte hex token, persisted at `~/.wasted-token-tracker/auth-secret`
 - **Localhost Bypass** -- Auth not enforced when bound to localhost (configurable)
-- **Environment Override** -- Set `AG_TOKEN_AUTH=required` for mandatory auth on all bindings
+- **Environment Override** -- Set `WASTED_TOKEN_AUTH=required` for mandatory auth on all bindings
 - **CSP-Safe Injection** -- Auth token injected via `<meta>` tag, no inline scripts
 
 ### Network Security

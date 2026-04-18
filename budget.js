@@ -1,8 +1,8 @@
 /**
- * AG-Code Token — Budget Alerts & Threshold Engine
+ * Wasted Token Tracker — Budget Alerts & Threshold Engine
  *
  * Configurable budget thresholds with breach detection and notification routing.
- * Budget config is persisted at ~/.ag-code-token/budgets.json.
+ * Budget config is persisted at ~/.wasted-token-tracker/budgets.json.
  *
  * Features:
  *   - Per-period budgets (daily, weekly, monthly)
@@ -21,7 +21,7 @@ import { existsSync } from 'fs';
 import { auditLog } from './security.js';
 
 // ─── Configuration ─────────────────────────────────────────────────────────────
-const AG_DIR = join(homedir(), '.ag-code-token');
+const AG_DIR = join(homedir(), '.wasted-token-tracker');
 const BUDGET_CONFIG_PATH = join(AG_DIR, 'budgets.json');
 const BREACH_HISTORY_PATH = join(AG_DIR, 'budget-breaches.json');
 

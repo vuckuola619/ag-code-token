@@ -1,5 +1,5 @@
 /**
- * AG-Code Token — Universal AI Token Monitor Server (v1.3.0)
+ * Wasted Token Tracker — Universal AI Token Monitor Server (v1.3.0)
  * 
  * Zero-dependency HTTP server with real-time file watching,
  * ISO 27001 / GDPR / SOC 2 security hardening, budget alerts,
@@ -60,7 +60,7 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3777;
-const HOST = process.env.AG_TOKEN_HOST || '127.0.0.1';
+const HOST = process.env.WASTED_TOKEN_HOST || '127.0.0.1';
 const VERSION = '1.3.0';
 const VALID_PERIODS = new Set(['today', 'week', '30days', 'month', 'all']);
 
@@ -365,7 +365,7 @@ async function handleAPI(req, res) {
       }));
       if (params.format === 'csv') {
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-        res.setHeader('Content-Disposition', `attachment; filename="ag-code-token-${params.period}.csv"`);
+        res.setHeader('Content-Disposition', `attachment; filename="wasted-token-tracker-${params.period}.csv"`);
         const head = Object.keys(rows[0] || {}).map(csvSafe).join(',');
         const body = rows.map(r => Object.values(r).map(csvSafe).join(',')).join('\n');
         auditLog('data_export', { format: 'csv', period: params.period, rows: rows.length });
@@ -704,7 +704,7 @@ process.on('unhandledRejection', (reason) => {
 async function main() {
   serverStartTime = Date.now();
 
-  console.log('\n  ⚡ AG-Code Token — Universal AI Token Monitor (v' + VERSION + ')');
+  console.log('\n  ⚡ Wasted Token Tracker — Universal AI Token Monitor (v' + VERSION + ')');
   console.log('  ─────────────────────────────────────────────────────\n');
 
   // Initialize security module
@@ -760,7 +760,7 @@ async function main() {
   if (budgetCfg.daily || budgetCfg.weekly || budgetCfg.monthly) {
     console.log(`  ✓  Budget thresholds active (daily: $${budgetCfg.daily || '∞'}, weekly: $${budgetCfg.weekly || '∞'}, monthly: $${budgetCfg.monthly || '∞'})`);
   } else {
-    console.log('  ○  No budget thresholds set. Configure at /api/budget or ~/.ag-code-token/budgets.json');
+    console.log('  ○  No budget thresholds set. Configure at /api/budget or ~/.wasted-token-tracker/budgets.json');
   }
 
   console.log('\n  [5/7] Loading webhook configuration...');
@@ -816,9 +816,9 @@ async function main() {
     console.log(`  🔒 Security:   Rate limiting (${120}/min), CSP, Auth, localhost-only`);
     if (isAuthRequired()) {
       const token = getAuthToken();
-      console.log(`  🔑 Auth Token: ${token?.slice(0, 8)}...${token?.slice(-4)} (full token in ~/.ag-code-token/auth-secret)`);
+      console.log(`  🔑 Auth Token: ${token?.slice(0, 8)}...${token?.slice(-4)} (full token in ~/.wasted-token-tracker/auth-secret)`);
     } else {
-      console.log(`  🔑 Auth:       Not enforced (localhost binding). Set AG_TOKEN_AUTH=required to enable.`);
+      console.log(`  🔑 Auth:       Not enforced (localhost binding). Set WASTED_TOKEN_AUTH=required to enable.`);
     }
     console.log('');
     auditLog('server_ready', { port: PORT, host: HOST, authRequired: isAuthRequired(), features: ['trends', 'budget', 'webhooks', 'currency'] });

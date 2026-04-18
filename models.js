@@ -202,7 +202,7 @@ const SHORT_MODEL_NAMES = {
 let pricingCache = null;
 
 function getCacheDir() {
-  return join(homedir(), '.cache', 'ag-code-token');
+  return join(homedir(), '.cache', 'wasted-token-tracker');
 }
 
 function getCachePath() {

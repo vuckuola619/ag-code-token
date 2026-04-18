@@ -1,5 +1,5 @@
 /**
- * AG-Code Token — Security Module (v2.0)
+ * Wasted Token Tracker — Security Module (v2.0)
  *
  * Implements ISO 27001 / GDPR / SOC 2 controls:
  *   - HTTP security headers (OWASP recommended)
@@ -30,7 +30,7 @@ const MAX_URL_LENGTH = 2048;          // prevent oversized URLs
 const MAX_BODY_SIZE = 0;              // GET-only API — reject all bodies
 
 // ─── Security Directories ──────────────────────────────────────────────────────
-const AG_DIR = join(homedir(), '.ag-code-token');
+const AG_DIR = join(homedir(), '.wasted-token-tracker');
 const AUTH_SECRET_PATH = join(AG_DIR, 'auth-secret');
 const HMAC_KEY_PATH = join(AG_DIR, 'hmac-key');
 const AUDIT_LOG_DIR = join(AG_DIR, 'audit');
@@ -47,7 +47,7 @@ let authToken = null;
 
 /**
  * Initialize authentication — generate or load a persistent auth secret.
- * The secret is stored at ~/.ag-code-token/auth-secret.
+ * The secret is stored at ~/.wasted-token-tracker/auth-secret.
  */
 export function initAuth() {
   try {
@@ -107,13 +107,13 @@ export function validateAuth(req) {
 /**
  * Check if auth requirement should be enforced.
  * Auth is required when the server is bound to non-localhost addresses,
- * or when AG_TOKEN_AUTH=required is set.
+ * or when WASTED_TOKEN_AUTH=required is set.
  */
 export function isAuthRequired() {
-  if (process.env.AG_TOKEN_NO_AUTH === '1') return false;
-  if (process.env.AG_TOKEN_AUTH === 'required') return true;
+  if (process.env.WASTED_TOKEN_NO_AUTH === '1') return false;
+  if (process.env.WASTED_TOKEN_AUTH === 'required') return true;
   // If bound to non-localhost, auth is required
-  const host = process.env.AG_TOKEN_HOST || '127.0.0.1';
+  const host = process.env.WASTED_TOKEN_HOST || '127.0.0.1';
   return host !== '127.0.0.1' && host !== 'localhost' && host !== '::1';
 }
 
@@ -459,7 +459,7 @@ let previousHmac = '0'.repeat(64); // genesis block
 
 /**
  * Initialize the HMAC key for audit log integrity.
- * The key is generated once and persisted at ~/.ag-code-token/hmac-key.
+ * The key is generated once and persisted at ~/.wasted-token-tracker/hmac-key.
  */
 function initHmacKey() {
   try {

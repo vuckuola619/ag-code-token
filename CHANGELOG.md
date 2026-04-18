@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to AG-Code Token are documented in this file.
+All notable changes to Wasted Token Tracker are documented in this file.
 
 ## [1.3.0] - 2026-04-18
 
@@ -10,7 +10,7 @@ All notable changes to AG-Code Token are documented in this file.
 - **Webhook Integrations** -- Slack, Discord, Telegram, and Generic HTTP webhook support with retry logic
 - **Multi-Currency Support** -- 12 currencies via ECB exchange rate API with 24h cache and offline fallback
 - **3D Token Skyline** -- ECharts-GL 3D bar visualization of weekly token consumption
-- **Token-Based Auth** -- Auto-generated Bearer token with persistent storage at `~/.ag-code-token/auth-secret`
+- **Token-Based Auth** -- Auto-generated Bearer token with persistent storage at `~/.wasted-token-tracker/auth-secret`
 - **HMAC-Chained Audit Logs** -- Tamper-evident SHA-256 hash chain for all security events
 - **System Tray Mode** -- Background server runner with PID management (`cli.js tray`)
 - **Docker Support** -- Multi-stage Alpine Dockerfile and docker-compose.yml
